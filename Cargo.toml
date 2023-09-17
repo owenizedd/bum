@@ -1,0 +1,18 @@
+[package]
+name = "bum"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+cargo-watch = "8.4.1"
+clap = { version = "4.0", features = ["derive"] }
+dirs = "5.0.1"
+reqwest = "0.11.20"
+tokio = { version = "1", features = ["full"] }
+async-std = "1.10"
+zip = "0.6.6"
+
+[scripts]
+watch = "cargo watch -x 'run -- install 1.0.3'"
