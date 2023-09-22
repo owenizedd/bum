@@ -27,7 +27,7 @@ pub fn get_architecture() -> &'static str {
 }
 
 pub async fn download_zip(url: &str, local_path: &str) -> Result<(), Box<dyn StdError>> {
-    println!("saving to: {}", local_path);
+
     let client = reqwest::Client::new();
 
     let response = client.get(url).send().await?;
@@ -44,7 +44,6 @@ pub async fn download_zip(url: &str, local_path: &str) -> Result<(), Box<dyn Std
 
         writer.flush().await?;
         
-        println!("Downloaded zip file to: {}", local_path);
     } else {
         println!("HTTP request was not successful: {:?}", response.status());
     }
@@ -64,7 +63,7 @@ pub async fn unzip_file(zip_file_path: &str, output_dir: &str) -> Result<(), Box
 
     let output_dir = PathBuf::from(format!("{}/{}", output_dir, version));
 
-    println!("extracting file {} ...", zip_file_path);
+    println!("Extracting zip file...");
     
     let zip_file = fs::File::open(zip_file_path).unwrap();
 
@@ -88,4 +87,22 @@ pub async fn unzip_file(zip_file_path: &str, output_dir: &str) -> Result<(), Box
         }
     }
     Ok(())
+}
+
+
+pub fn check_folder_exists(path: &str) -> bool{
+
+    // Use std::fs::metadata to check if the folder exists
+    match fs::metadata(path) {
+        Ok(metadata) => {
+            if metadata.is_dir() {
+                return true
+            } else {
+                return false
+            }
+        }
+        Err(_) => {
+            return false
+        }
+    }
 }
