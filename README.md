@@ -14,6 +14,6 @@ Commands:
 
 Bum release is WIP. For now you have to have Cargo installed.
 
-
+Any contribution is appreciated.
 
 > This project is part of my Rust learning, expect some messy code
