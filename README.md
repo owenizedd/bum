@@ -13,3 +13,7 @@ Commands:
    - If exists, it will use that version as active version.
 
 Bum release is WIP. For now you have to have Cargo installed.
+
+
+
+> This project is part of my Rust learning, expect some messy code
