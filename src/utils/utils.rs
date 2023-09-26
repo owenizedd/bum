@@ -9,7 +9,6 @@ use std::error::Error as StdError; // Import std::error::Error
 use std::path::{Path, PathBuf};
 use std::error::Error;
 
-
 pub fn get_architecture() -> &'static str {
   let output = Command::new("uname")
       .arg("-ms")
@@ -86,6 +85,8 @@ pub async fn unzip_file(zip_file_path: &str, output_dir: &str) -> Result<(), Box
 
         }
     }
+
+    let _ = fs::remove_file(zip_file_path);
     Ok(())
 }
 
