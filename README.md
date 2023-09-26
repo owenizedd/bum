@@ -16,5 +16,3 @@ Commands:
    - If exists, it will use that version as active version.
 
 Any contribution is appreciated.
-
-> This project is part of my Rust learning, expect some messy code
