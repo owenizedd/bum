@@ -20,7 +20,7 @@ Bum initial version is released! You can see the [releases page](https://github.
 - `bum use <version>`
    - e.g. `bum use 1.0.3`
    - This will automatically use v1.0.3, yes no need write suffix `v`.
-   - If there's no target version in installed in the local and then install that version then use it.
+   - If there's no target version is installed in the local, it will install that version then use it.
    - Else, it will just use that version as active version.
 
 Any contribution is appreciated.
