@@ -6,8 +6,7 @@ use utils::command::use_bun;
 
 #[derive(Parser)]
 struct Cli {
-    // command: use, install, default
-    command: String ,
+    command: String,
     version: String,
 }
 
