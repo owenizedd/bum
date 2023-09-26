@@ -12,7 +12,7 @@ Commands:
    - This will automatically install if there's no target version in saved in the local and then use that version
    - If exists, it will use that version as active version.
 
-Bum release is WIP. For now you have to have Cargo installed.
+Bum initial version is released! You can download it from [releases page](https://github.com/owenizedd/bum/releases)
 
 Any contribution is appreciated.
 
