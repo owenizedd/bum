@@ -8,7 +8,7 @@
 
 Introducing Bum, a bun version manager.  
 Built in Rust from scratch.
-There are many improvement, but I can say it's really fast to use!
+There are many future improvements, but I can say it's really fast to use!
 
 Bum initial version is released! You can see the [releases page](https://github.com/owenizedd/bum/releases)
 
@@ -18,7 +18,9 @@ Bum initial version is released! You can see the [releases page](https://github.
 
 ## How to use:
 - `bum use <version>`
-   - This will automatically install if there's no target version in saved in the local and then use that version
-   - If exists, it will use that version as active version.
+   - `bum use 1.0.3`
+   - This will automatically use v1.0.3, yes no need write suffix `v`.
+   - If there's no target version in installed in the local and then install that version then use it.
+   - Else, it will just use that version as active version.
 
 Any contribution is appreciated.
