@@ -11,10 +11,13 @@ Built in Rust from scratch.
 There are many improvement, but I can say it's really fast to use!
 
 Bum initial version is released! You can download it from [releases page](https://github.com/owenizedd/bum/releases)
-Currently the installing process will be improved, but for now you have to download the executable manually.
+
+To install:
+`curl -fsSL https://github.com/owenizedd/bum/releases/latest/download/install.sh | bash`
+> This installation will install bun for you and also bum altogether.
 
 Commands:
-- `./bum use <version>`
+- `bum use <version>`
    - This will automatically install if there's no target version in saved in the local and then use that version
    - If exists, it will use that version as active version.
 
