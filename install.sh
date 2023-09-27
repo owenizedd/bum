@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if ! bun &> /dev/null
+then
+    curl -fsSL https://bun.sh/install | bash
+fi
 
-curl -fsSL https://bum.sh/install | bash
 
 case $(uname -ms) in
 'Darwin x86_64')
@@ -120,8 +123,6 @@ zsh)
             done
         } >>"$zsh_config"
 
-        info "Added \"$tilde_bin_dir\" to \$PATH in \"$tilde_zsh_config\""
-
         refresh_command="exec $SHELL"
     else
         echo "Manually add the directory to $tilde_zsh_config (or similar):"
@@ -188,12 +189,3 @@ bash)
     ;;
 esac
 
-echo
-info "To get started, run:"
-echo
-
-if [[ $refresh_command ]]; then
-    info_bold "  $refresh_command"
-fi
-
-info_bold "  bum --help"
