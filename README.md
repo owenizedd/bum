@@ -12,6 +12,8 @@ There are many future improvements, but I can say it's really fast to use!
 
 Bum initial version is released! You can see the [releases page](https://github.com/owenizedd/bum/releases)
 
+Bum is currently included in the [oven-sh/awesome-bun](https://github.com/oven-sh/awesome-bun) list ⚡️
+
 ## To install:
 `curl -fsSL https://github.com/owenizedd/bum/releases/latest/download/install.sh | bash`
 > This installation will install bun for you and also bum altogether.
