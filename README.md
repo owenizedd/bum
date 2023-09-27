@@ -6,7 +6,7 @@
 
 ## Bum - Bun Version Manager   
 
-Introducing Bum, a bun version manager.  
+Introducing Bum, a Bun version manager.  
 Built in Rust from scratch.
 There are many future improvements, but I can say it's really fast to use!
 
