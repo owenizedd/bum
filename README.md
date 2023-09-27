@@ -18,7 +18,7 @@ Bum initial version is released! You can see the [releases page](https://github.
   > Bum is supported on Linux x86_64 and Darwin x86_64 (Mac OS)
 - Restart terminal or `source ~/.zshrc` or `source ~/.bashrc` depending on your terminal.
 
-- 
+
 ## How to use:
 - `bum use <version>`
    - e.g. `bum use 1.0.3`
