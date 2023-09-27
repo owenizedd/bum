@@ -16,7 +16,7 @@ Bum is currently included in the [oven-sh/awesome-bun](https://github.com/oven-s
 
 ## To install:
 `curl -fsSL https://github.com/owenizedd/bum/raw/main/install.sh | bash`
-> This installation will install bun for you and also bum altogether. (**Only support linux for now, will support macOS soon**)
+> This installation will install bun for you and also bum altogether. (I
 
 ## How to use:
 - `bum use <version>`
