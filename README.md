@@ -13,10 +13,12 @@ There are many future improvements, but I can say it's really fast to use!
 Bum initial version is released! You can see the [releases page](https://github.com/owenizedd/bum/releases)
 
 ## To install:
-`curl -fsSL https://github.com/owenizedd/bum/raw/main/install.sh | bash`
-> This installation will install bun for you and also bum altogether.  
-> Bum is supported on Linux x86_64 and Darwin x86_64 (Mac OS)
+- `curl -fsSL https://github.com/owenizedd/bum/raw/main/install.sh | bash`
+  > This installation will install bun for you and also bum altogether.  
+  > Bum is supported on Linux x86_64 and Darwin x86_64 (Mac OS)
+- Restart terminal or `source ~/.zshrc` or `source ~/.bashrc` depending on your terminal.
 
+- 
 ## How to use:
 - `bum use <version>`
    - e.g. `bum use 1.0.3`
