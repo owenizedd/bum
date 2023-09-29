@@ -67,15 +67,15 @@ fn print_default_message() {
         '    '          '   '        '          '       "#;
 
     let colors: [DynColors; 3] = [
-        "#B80A41", "#4E4BA8", "#6EB122",
+        "#f6e0b5", "#aa6f73", "#eea990",
     ]
     .map(|color| color.parse().unwrap());  
 
     for line in BUM.split_inclusive('\n') {
         
         print!("{}", line[0..16].to_string().color(colors[0]));
-        print!("{}", line[17..32].to_string().color(colors[1]));
-        print!("{}", line[32..56].to_string().color(colors[2]));
+        print!("{}", line[17..33].to_string().color(colors[1]));
+        print!("{}", line[34..56].to_string().color(colors[2]));
 
         
     }
