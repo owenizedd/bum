@@ -15,7 +15,8 @@ Bum initial version is released! You can see the [releases page](https://github.
 ## To install:
 - `curl -fsSL https://github.com/owenizedd/bum/raw/main/install.sh | bash`
   > This installation will install bun for you and also bum altogether.  
-  > Bum is supported on Linux x86_64 and Darwin x86_64 (Mac OS)
+  > Bum is supported on **Linux x86_64** and **Darwin x86_64** (Mac OS)  
+  > You can enter `uname -ms` command in your terminal to see yours
 - Restart terminal or `source ~/.zshrc` or `source ~/.bashrc` depending on your terminal.
 
 
