@@ -34,7 +34,7 @@ pub async fn main() {
     match Opts::try_parse() {
       Ok(command) => match command {
         Opts::Default(args) => {
-
+            println!("This feature will be implemented in the future.");
         },
         Opts::Remove(args) => {
             remove_bun(&args.version).await;
