@@ -1,9 +1,10 @@
 
+use async_std::fs::remove_dir_all;
 use dirs::home_dir;
 use utils::check_folder_exists;
 use std::path::PathBuf;
 use crate::utils::utils;
-use std::fs::{self, File};
+use std::fs::{self, File, remove_dir};
 use std::error::Error;
 use std::io;
 use std::os::unix::fs::PermissionsExt;
@@ -18,8 +19,8 @@ pub async fn use_bun(version: &str) -> Result<(), Box<dyn Error>> {
   if check_folder_exists(&format!("{}/{}", FOLDER_VERSION_BASE, version)) {
     let bun_used_path = format!("{}/{}/bun-{}/bun", FOLDER_VERSION_BASE, version, arch);
     match activate_bun(bun_used_path, home_path) {
-      Ok(()) => println!("Bun v{} is active", version),
-      _ => println!("Failed")
+      Ok(()) => println!("Bun v{} is activated.", version),
+      _ => println!("Failed to activate Bun v{}", version)
     }
   } else {
     println!("Bum - installing bun for version {}...", version);
@@ -78,4 +79,18 @@ pub fn activate_bun(bun_used_path : String, home_path : Option<PathBuf> ) -> Res
     None => println!("Failed to get home path")
   }
   Ok(())
+}
+
+pub async fn remove_bun(version: &str) { 
+  // let home_path = home_dir();
+
+  let result = remove_dir_all(format!("{}/{}", FOLDER_VERSION_BASE, version)).await;
+  match result { 
+    Ok(()) => {
+      println!("v{} has been removed.", version);
+    }
+    Err(error) => {
+      println!("Failed to remove the version, possibly not installed yet: {}", error)
+    }
+  }
 }

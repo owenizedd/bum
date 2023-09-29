@@ -1,7 +1,7 @@
 use clap::Parser;
 use std::error::Error;
 mod utils;
-use utils::command::use_bun;
+use utils::{command::use_bun, remove_bun};
 use owo_colors::{DynColors, OwoColorize};
 
 
@@ -37,7 +37,7 @@ pub async fn main() {
 
         },
         Opts::Remove(args) => {
-
+            remove_bun(&args.version).await;
         }
         Opts::Use(args) => {
            let _ = use_bun(&args.version).await;
