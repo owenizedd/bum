@@ -11,7 +11,6 @@ pub const FOLDER_VERSION_BASE: &str = "./bun-versions";
 
 
 
-
 pub async fn use_bun(version: &str) -> Result<(), Box<dyn Error>> {
   let home_path = home_dir();
   let arch = utils::get_architecture();
