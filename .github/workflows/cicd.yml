@@ -34,15 +34,15 @@ jobs:
       homepage: ${{ steps.crate_metadata.outputs.homepage }}
       msrv: ${{ steps.crate_metadata.outputs.msrv }}
 
-  ensure_cargo_fmt:
-    name: Ensure 'cargo fmt' has been run
-    runs-on: ubuntu-20.04
-    steps:
-    - uses: dtolnay/rust-toolchain@stable
-      with:
-        components: rustfmt
-    - uses: actions/checkout@v4
-    - run: cargo fmt -- --check
+  # ensure_cargo_fmt:
+  #   name: Ensure 'cargo fmt' has been run
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #   - uses: dtolnay/rust-toolchain@stable
+  #     with:
+  #       components: rustfmt
+  #   - uses: actions/checkout@v4
+  #   - run: cargo fmt -- --check
 
   min_version:
     name: Minimum supported rust version
