@@ -57,5 +57,7 @@ Options:
    - This feature will only remove local copy, but if you're using the removed version, you will still be able to use that version, but once you change to other version, you will not be able to change to that version anymore.
    - In the future we will automatically switch to the latest version available upon removal of the version.
 - The `bun list` will be implemented in the future.
-- The `bun default <version>` will be implemented in the future
+- The `bun default <version>` will be implemented in the future.
+
+
 Any contribution is appreciated.
