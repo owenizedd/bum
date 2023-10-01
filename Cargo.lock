@@ -390,6 +390,7 @@ dependencies = [
  "cargo-watch",
  "clap 4.4.3",
  "dirs 5.0.1",
+ "openssl",
  "owo-colors",
  "reqwest",
  "tokio",
