@@ -1,12 +1,20 @@
 use clap::Parser;
-use std::error::Error;
 mod utils;
 use utils::{command::use_bun, remove_bun};
 use owo_colors::{DynColors, OwoColorize};
+pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+#[derive(Parser)]
+#[command(arg_required_else_help = true)]
+pub struct Opts {
+    #[clap(short, long)]
+    version: bool,
 
+    #[clap(subcommand)]
+    pub command: Option<Command>,
+}
 
 #[derive(Parser)]
-pub enum Opts {
+pub enum Command {
     Default(DefaultCommand),
     Use(UseCommand),
     Remove(RemoveCommand),
@@ -28,21 +36,39 @@ pub struct RemoveCommand {
 }
 
 
+
 #[tokio::main]
 pub async fn main() {
+    let opts = Opts::try_parse();
 
-    match Opts::try_parse() {
-      Ok(command) => match command {
-        Opts::Default(args) => {
-            println!("This feature will be implemented in the future.");
-        },
-        Opts::Remove(args) => {
-            remove_bun(&args.version).await;
+    let mut printed_version = false;
+    
+    match opts {
+      Ok(result) => {
+        if result.version {
+          println!("{}", VERSION);
+          printed_version = true;
         }
-        Opts::Use(args) => {
-           let _ = use_bun(&args.version).await;
+        match result.command {
+          Some(command) =>  {
+            match command {
+                Command::Default(_args) => {
+                    println!("This feature will be implemented in the future.");
+                },
+                Command::Remove(args) => {
+                    remove_bun(&args.version).await;
+                }
+                Command::Use(args) => {
+                let _ = use_bun(&args.version).await;
+                },
+            } 
+          },
+          None => {
+            if !printed_version {
+              println!("Use -h to print help")
+            }
+          }
         }
-
       },
       Err(e) => {
         print_default_message();
