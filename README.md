@@ -48,10 +48,14 @@ Options:
   -h, --help  Print help
 ```
 
-- Or directly use: `bum use <version>`
+- The `bum use <version>` is to change the current active bun version
    - e.g. `bum use 1.0.3`
    - This will automatically use v1.0.3, yes no need write suffix `v`.
    - If there's no target version is installed in the local, it will install that version then use it.
    - Else, it will just use that version as active version.
-
+- The `bum remove <version>` is to remove the installed locally.
+   - This feature will only remove local copy, but if you're currently using the removed version, you will still be able to use that version for now.
+   - In the future we will automatically switch to the latest version available upon removal of the version.
+- The `bun list` will be implemented in the future.
+- The `bun default <version>` will be implemented in the future
 Any contribution is appreciated.
