@@ -10,7 +10,7 @@ Introducing Bum, a Bun version manager.
 Built in Rust from scratch.
 There are many future improvements, but I can say it's really fast to use!
 
-Bum initial version is released! You can see the [releases page](https://github.com/owenizedd/bum/releases)
+<img src=".docs/bum-quick-demo.gif" width="600">
 
 ## To install:
 
