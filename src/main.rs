@@ -1,6 +1,6 @@
 use clap::Parser;
 mod utils;
-use utils::{command::use_bun, remove_bun};
+use utils::{command::use_bun, remove_bun, display_versions_list};
 use owo_colors::{DynColors, OwoColorize};
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 #[derive(Parser)]
@@ -18,6 +18,7 @@ pub enum Command {
     Default(DefaultCommand),
     Use(UseCommand),
     Remove(RemoveCommand),
+    List(ListCommand),
 }
 
 #[derive(Parser)]
@@ -35,40 +36,42 @@ pub struct RemoveCommand {
     version: String
 }
 
+#[derive(Parser)]
+pub struct ListCommand{
 
+}
 
 #[tokio::main]
 pub async fn main() {
     let opts = Opts::try_parse();
-
-    let mut printed_version = false;
     
     match opts {
       Ok(result) => {
         if result.version {
           println!("{}", VERSION);
-          printed_version = true;
-        }
-        match result.command {
-          Some(command) =>  {
-            match command {
-                Command::Default(_args) => {
+        } else {
+          match result.command {
+            Some(command) =>  {
+              match command {
+                  Command::Default(_args) => {
                     println!("This feature will be implemented in the future.");
-                },
-                Command::Remove(args) => {
+                  },
+                  Command::Remove(args) => {
                     remove_bun(&args.version).await;
-                }
-                Command::Use(args) => {
-                let _ = use_bun(&args.version).await;
-                },
-            } 
-          },
-          None => {
-            if !printed_version {
-              println!("Use -h to print help")
+                  }
+                  Command::Use(args) => {
+                    let _ = use_bun(&args.version).await;
+                  },
+                  Command::List(_args) => {
+                    display_versions_list()
+                  }
+              } 
+            },
+            None => {
+                println!("Use -h to print help")
             }
           }
-        }
+       }
       },
       Err(e) => {
         print_default_message();
