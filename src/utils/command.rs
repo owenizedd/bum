@@ -4,10 +4,12 @@ use dirs::home_dir;
 use utils::check_folder_exists;
 use std::path::PathBuf;
 use crate::utils::utils;
-use std::fs::{self, File, remove_dir};
+use std::fs::{self, File};
 use std::error::Error;
 use std::io;
 use std::os::unix::fs::PermissionsExt;
+use owo_colors::{self, OwoColorize, DynColors};
+use super::utils::get_active_version;
 pub const FOLDER_VERSION_BASE: &str = "./bun-versions";
 
 
@@ -92,5 +94,42 @@ pub async fn remove_bun(version: &str) {
     Err(error) => {
       println!("Failed to remove the version, possibly not installed yet: {}", error)
     }
+  }
+}
+
+pub fn display_versions_list() {
+  let mut versions_list: Vec<String> = Vec::new();
+  let result = fs::read_dir(FOLDER_VERSION_BASE);
+  
+  match result {
+      Ok(entries) => {
+          for entry in entries {
+              let entry = entry.unwrap();
+              let path_buf: PathBuf = entry.path();
+              let path_str = path_buf.to_string_lossy().to_string(); 
+
+              // Normalize path separators
+              let path_str = path_str.replace("\\", "/"); 
+
+              let version = path_str.split('/').last().unwrap_or_default();
+              versions_list.push(version.to_string());
+              
+          }
+          versions_list.sort();
+          versions_list.reverse();
+          let active_version = get_active_version();
+          let active_color: DynColors = "#eea990".parse().unwrap();
+          let active_style = owo_colors::Style::new().color(active_color).bold();
+          for version in versions_list {
+              if version == active_version {
+                  println!("{} {}", "•".style(active_style), version.style(active_style));
+              } else {
+                  println!("• {}", version);
+              }
+          }
+      },
+      Err(error) => {
+          println!("Failed to read versions: {}", error);
+      }
   }
 }

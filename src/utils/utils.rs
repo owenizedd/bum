@@ -2,6 +2,7 @@ use std::process::Command;
 use std::str;
 use std::fs;
 use std::io;
+use dirs::home_dir;
 use reqwest::{self};
 use tokio::fs::File;
 use tokio::io::{ AsyncWriteExt, BufWriter};
@@ -106,4 +107,15 @@ pub fn check_folder_exists(path: &str) -> bool{
             return false
         }
     }
+}
+
+pub fn get_active_version() -> String {
+    //get active version by running bun -v
+    let output = Command::new("bun")
+        .arg("-v")
+        .output()
+        .expect("Failed to execute bun -v, is bun installed?");
+
+    let stdout = str::from_utf8(&output.stdout).expect("Failed to convert stdout to string");
+    stdout.trim().to_string()
 }

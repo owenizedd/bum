@@ -1,15 +1,24 @@
 use clap::Parser;
-use std::error::Error;
 mod utils;
-use utils::{command::use_bun, remove_bun};
+use utils::{command::use_bun, remove_bun, display_versions_list};
 use owo_colors::{DynColors, OwoColorize};
+pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+#[derive(Parser)]
+#[command(arg_required_else_help = true)]
+pub struct Opts {
+    #[clap(short, long)]
+    version: bool,
 
+    #[clap(subcommand)]
+    pub command: Option<Command>,
+}
 
 #[derive(Parser)]
-pub enum Opts {
+pub enum Command {
     Default(DefaultCommand),
     Use(UseCommand),
     Remove(RemoveCommand),
+    List(ListCommand),
 }
 
 #[derive(Parser)]
@@ -27,22 +36,42 @@ pub struct RemoveCommand {
     version: String
 }
 
+#[derive(Parser)]
+pub struct ListCommand{
+
+}
 
 #[tokio::main]
 pub async fn main() {
-
-    match Opts::try_parse() {
-      Ok(command) => match command {
-        Opts::Default(args) => {
-            println!("This feature will be implemented in the future.");
-        },
-        Opts::Remove(args) => {
-            remove_bun(&args.version).await;
-        }
-        Opts::Use(args) => {
-           let _ = use_bun(&args.version).await;
-        }
-
+    let opts = Opts::try_parse();
+    
+    match opts {
+      Ok(result) => {
+        if result.version {
+          println!("{}", VERSION);
+        } else {
+          match result.command {
+            Some(command) =>  {
+              match command {
+                  Command::Default(_args) => {
+                    println!("This feature will be implemented in the future.");
+                  },
+                  Command::Remove(args) => {
+                    remove_bun(&args.version).await;
+                  }
+                  Command::Use(args) => {
+                    let _ = use_bun(&args.version).await;
+                  },
+                  Command::List(_args) => {
+                    display_versions_list()
+                  }
+              } 
+            },
+            None => {
+                println!("Use -h to print help")
+            }
+          }
+       }
       },
       Err(e) => {
         print_default_message();
