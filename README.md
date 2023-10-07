@@ -10,7 +10,7 @@ Introducing Bum, a Bun version manager.
 Built in Rust from scratch.
 There are many future improvements, but I can say it's really fast to use!
 
-Bum initial version is released! You can see the [releases page](https://github.com/owenizedd/bum/releases)
+<img src=".docs/bum-quick-demo.gif" width="600">
 
 ## To install:
 
@@ -60,8 +60,8 @@ Options:
 - The `bum remove <version>` is to remove the installed locally.
    - This feature will only remove local copy, but if you're using the removed version, you will still be able to use that version, but once you change to other version, you will not be able to change to that version anymore.
    - In the future we will automatically switch to the latest version available upon removal of the version.
-- The `bun list` will be implemented in the future.
-- The `bun default <version>` will be implemented in the future.
+- The `bum list` will show all local installed versions of Bun.
+- The `bum default <version>` will be implemented in the future.
 
 
 Any contribution is appreciated.
