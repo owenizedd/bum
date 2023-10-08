@@ -15,7 +15,8 @@ tokio = { version = "1", features = ["full"] }
 async-std = "1.10"
 zip = "0.6.6"
 owo-colors = "3.5.0"
-openssl = "0.10.57"
+openssl = { version = "0.10", features = ["vendored"] }
+
 
 [scripts]
 watch = "cargo watch -x 'run -- install 1.0.3'"
