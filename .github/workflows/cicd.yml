@@ -13,8 +13,6 @@ on:
     tags:
       - '*'
 
-# force trigger
-
 jobs:
   crate_metadata:
     name: Extract crate metadata
