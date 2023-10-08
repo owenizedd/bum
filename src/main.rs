@@ -1,5 +1,5 @@
 use clap::Parser;
-use std::error::Error;
+
 mod utils;
 use utils::{command::use_bun, remove_bun};
 use owo_colors::{DynColors, OwoColorize};
@@ -33,7 +33,7 @@ pub async fn main() {
 
     match Opts::try_parse() {
       Ok(command) => match command {
-        Opts::Default(args) => {
+        Opts::Default(_args) => {
             println!("This feature will be implemented in the future.");
         },
         Opts::Remove(args) => {

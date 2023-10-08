@@ -4,7 +4,7 @@ use dirs::home_dir;
 use utils::check_folder_exists;
 use std::path::PathBuf;
 use crate::utils::utils;
-use std::fs::{self, File, remove_dir};
+use std::fs::{self, File};
 use std::error::Error;
 use std::io;
 use std::os::unix::fs::PermissionsExt;
