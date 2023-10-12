@@ -92,7 +92,7 @@ async fn run_commands(used_command: Option<Command>) {
 }
 
 fn print_default_message() {
-  const BUM: &str = r#"      _____    ____   ____      ______  _______        
+  const BUM: &str = r#"         _____    ____   ____      ______  _______   
     ___|\     \  |    | |    |    |      \/       \  
    |    |\     \ |    | |    |   /          /\     \ 
    |    | |     ||    | |    |  /     /\   / /\     |
@@ -114,7 +114,7 @@ fn print_default_message() {
       
       print!("{}", line[0..16].to_string().color(colors[0]));
       print!("{}", line[17..33].to_string().color(colors[1]));
-      print!("{}", line[34..56].to_string().color(colors[2]));
+      print!("{}", line[34..54].to_string().color(colors[2]));
 
       
   }
