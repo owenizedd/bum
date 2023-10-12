@@ -14,7 +14,7 @@ pub const FOLDER_VERSION_BASE: &str = "./bun-versions";
 
 
 
-pub async fn use_bun(version: &str) -> Result<(), Box<dyn Error>> {
+pub async fn use_bun(version: &str) -> () {
   let home_path = home_dir();
   let arch = utils::get_architecture();
 
@@ -30,14 +30,14 @@ pub async fn use_bun(version: &str) -> Result<(), Box<dyn Error>> {
     let github_bun_download_url : std::string::String = format!("https://github.com/oven-sh/bun/releases/download/bun-v{}/bun-{}.zip", version, arch);
 
     if !fs::metadata(FOLDER_VERSION_BASE).is_ok() {
-        fs::create_dir_all(FOLDER_VERSION_BASE)?;
+        let _ = fs::create_dir_all(FOLDER_VERSION_BASE);
     }
 
     let zip_file_path = &format!("{}/{}.zip",FOLDER_VERSION_BASE,version);
     let result = utils::download_zip(&github_bun_download_url, &zip_file_path).await;
     match result {
         Ok(()) => {
-            utils::unzip_file(&zip_file_path, FOLDER_VERSION_BASE).await?;
+            let _ = utils::unzip_file(&zip_file_path, FOLDER_VERSION_BASE).await;
             
             let bun_used_path = format!("{}/{}/bun-{}/bun", FOLDER_VERSION_BASE, version, arch);
             match activate_bun(bun_used_path, home_path) {
@@ -48,7 +48,7 @@ pub async fn use_bun(version: &str) -> Result<(), Box<dyn Error>> {
         Err(err) => eprintln!("Error: {}", err),
     }
   }
-  Ok(())
+ 
 
 }
 
@@ -131,5 +131,18 @@ pub fn display_versions_list() {
       Err(error) => {
           println!("Failed to read versions: {}", error);
       }
+  }
+}
+
+pub async fn use_bumrc_version(){
+  let bumrc_version = utils::get_bumrc_version();
+  match bumrc_version {
+    Ok(version) => {
+      println!("Using version {} from .bumrc", version);
+      use_bun(&version).await;
+    },
+    Err(e) => {
+      println!("No version specified or {}, please use bum use <version> or use -h to print help", e);
+    }
   }
 }

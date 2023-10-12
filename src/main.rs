@@ -1,6 +1,6 @@
 use clap::Parser;
 mod utils;
-use utils::{command::use_bun, remove_bun, display_versions_list};
+use utils::{command::use_bun, remove_bun, display_versions_list, use_bumrc_version};
 use owo_colors::{DynColors, OwoColorize};
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 #[derive(Parser)]
@@ -28,7 +28,7 @@ pub struct DefaultCommand {
 
 #[derive(Parser)]
 pub struct UseCommand {
-    version: String
+    version: Option<String>
 }
 
 #[derive(Parser)]
@@ -50,27 +50,7 @@ pub async fn main() {
         if result.version {
           println!("{}", VERSION);
         } else {
-          match result.command {
-            Some(command) =>  {
-              match command {
-                  Command::Default(_args) => {
-                    println!("This feature will be implemented in the future.");
-                  },
-                  Command::Remove(args) => {
-                    remove_bun(&args.version).await;
-                  }
-                  Command::Use(args) => {
-                    let _ = use_bun(&args.version).await;
-                  },
-                  Command::List(_args) => {
-                    display_versions_list()
-                  }
-              } 
-            },
-            None => {
-                println!("Use -h to print help")
-            }
-          }
+          run_commands(result.command).await;
        }
       },
       Err(e) => {
@@ -80,33 +60,63 @@ pub async fn main() {
     }
 }
 
+async fn run_commands(used_command: Option<Command>) {
+  match used_command {
+    Some(command) =>  {
+      match command {
+          Command::Default(_args) => {
+            println!("This feature will be implemented in the future.");
+          },
+          Command::Remove(args) => {
+            remove_bun(&args.version).await;
+          }
+          Command::Use(args) => {
+            match args.version {
+              Some(version) => {
+                use_bun(&version).await;
+              },
+              None => {
+                use_bumrc_version().await;
+              }
+            }
+          },
+          Command::List(_args) => {
+            display_versions_list()
+          }
+      } 
+    },
+    None => {
+        println!("Use -h to print help")
+    }
+  }
+}
 
 fn print_default_message() {
-    const BUM: &str = r#"      _____    ____   ____      ______  _______        
-      ___|\     \  |    | |    |    |      \/       \  
-     |    |\     \ |    | |    |   /          /\     \ 
-     |    | |     ||    | |    |  /     /\   / /\     |
-     |    | /_ _ / |    | |    | /     /\ \_/ / /    /|
-     |    |\    \  |    | |    ||     |  \|_|/ /    / |
-     |    | |    | |    | |    ||     |       |    |  |
-     |____|/____/| |\___\_|____||\____\       |____|  /
-     |    /     || | |    |    || |    |      |    | / 
-     |____|_____|/  \|____|____| \|____|      |____|/  
-       \(    )/        \(   )/      \(          )/     
-        '    '          '   '        '          '       "#;
+  const BUM: &str = r#"      _____    ____   ____      ______  _______        
+    ___|\     \  |    | |    |    |      \/       \  
+   |    |\     \ |    | |    |   /          /\     \ 
+   |    | |     ||    | |    |  /     /\   / /\     |
+   |    | /_ _ / |    | |    | /     /\ \_/ / /    /|
+   |    |\    \  |    | |    ||     |  \|_|/ /    / |
+   |    | |    | |    | |    ||     |       |    |  |
+   |____|/____/| |\___\_|____||\____\       |____|  /
+   |    /     || | |    |    || |    |      |    | / 
+   |____|_____|/  \|____|____| \|____|      |____|/  
+     \(    )/        \(   )/      \(          )/     
+      '    '          '   '        '          '       "#;
 
-    let colors: [DynColors; 3] = [
-        "#f6e0b5", "#aa6f73", "#eea990",
-    ]
-    .map(|color| color.parse().unwrap());  
+  let colors: [DynColors; 3] = [
+      "#f6e0b5", "#aa6f73", "#eea990",
+  ]
+  .map(|color| color.parse().unwrap());  
 
-    for line in BUM.split_inclusive('\n') {
-        
-        print!("{}", line[0..16].to_string().color(colors[0]));
-        print!("{}", line[17..33].to_string().color(colors[1]));
-        print!("{}", line[34..56].to_string().color(colors[2]));
+  for line in BUM.split_inclusive('\n') {
+      
+      print!("{}", line[0..16].to_string().color(colors[0]));
+      print!("{}", line[17..33].to_string().color(colors[1]));
+      print!("{}", line[34..56].to_string().color(colors[2]));
 
-        
-    }
-    println!()                              
+      
+  }
+  println!()                              
 }

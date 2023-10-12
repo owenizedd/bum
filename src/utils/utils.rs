@@ -119,3 +119,13 @@ pub fn get_active_version() -> String {
     let stdout = str::from_utf8(&output.stdout).expect("Failed to convert stdout to string");
     stdout.trim().to_string()
 }
+
+pub fn get_bumrc_version() -> Result<String, &'static str> {
+    let bumrc_path = Path::new(".bumrc");
+    if bumrc_path.exists() {
+        let bumrc_version = fs::read_to_string(".bumrc").expect("Failed to read .bumrc, is it a valid file?");
+        Ok(bumrc_version.trim().to_string())
+    } else {
+        Err("No .bumrc file found")
+    }
+}
