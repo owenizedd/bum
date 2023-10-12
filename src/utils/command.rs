@@ -17,11 +17,14 @@ pub const FOLDER_VERSION_BASE: &str = "./bun-versions";
 pub async fn use_bun(version: &str) -> () {
   let home_path = home_dir();
   let arch = utils::get_architecture();
+  
+  let active_color: DynColors = "#eea990".parse().unwrap();
+  let active_style = owo_colors::Style::new().color(active_color).bold();
 
   if check_folder_exists(&format!("{}/{}", FOLDER_VERSION_BASE, version)) {
     let bun_used_path = format!("{}/{}/bun-{}/bun", FOLDER_VERSION_BASE, version, arch);
     match activate_bun(bun_used_path, home_path) {
-      Ok(()) => println!("Bun v{} is activated.", version),
+      Ok(()) => println!("Bun {} is activated.", format!("v{}",version).style(active_style)),
       _ => println!("Failed to activate Bun v{}", version)
     }
   } else {
@@ -41,7 +44,7 @@ pub async fn use_bun(version: &str) -> () {
             
             let bun_used_path = format!("{}/{}/bun-{}/bun", FOLDER_VERSION_BASE, version, arch);
             match activate_bun(bun_used_path, home_path) {
-              Ok(()) => println!("Bun v{} is active", version),
+              Ok(()) => println!("Bun {} is activated.", format!("v{}",version).style(active_style)),
               _ => println!("Failed")
             }
         },
@@ -122,7 +125,7 @@ pub fn display_versions_list() {
           let active_style = owo_colors::Style::new().color(active_color).bold();
           for version in versions_list {
               if version == active_version {
-                  println!("{} {}", "•".style(active_style), format!("{} (active)", version).style(active_style));
+                  println!("{} {}", "• ".style(active_style), format!("{} (active)", version.style(active_style)));
               } else {
                   println!("• {}", version);
               }
