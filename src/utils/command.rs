@@ -125,7 +125,7 @@ pub fn display_versions_list() {
           let active_style = owo_colors::Style::new().color(active_color).bold();
           for version in versions_list {
               if version == active_version {
-                  println!("{} {}", "• ".style(active_style), format!("{} (active)", version.style(active_style)));
+                  println!("{} {}", "•".style(active_style), format!("{} (active)", version.style(active_style)));
               } else {
                   println!("• {}", version);
               }
