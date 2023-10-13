@@ -6,13 +6,11 @@
 <a href="https://github.com/owenizedd/bum/actions/workflows/rust.yml"><img alt="GitHub CI Status" src="https://img.shields.io/github/actions/workflow/status/owenizedd/bum/rust.yml?label=CI&logo=GitHub"></a> <br/>
 
 
-Introducing Bum, a Bun version manager.  
-Built in Rust from scratch.
-There are many future improvements, but I can say it's really fast to use!
+Introducing Bum, a fast Bun version manager written in Rust from scratch.  
 
 <img src=".docs/bum-quick-demo.gif" width="600">
 
-## To install:
+## How to install:
 
 1. Open your terminal and execute:
 ```
@@ -25,43 +23,25 @@ curl -fsSL https://github.com/owenizedd/bum/raw/main/install.sh | bash
 
 
 ## How to use:
-- You can just run `bum` without any parameter to see default menu.
 
-```yaml
-      _____    ___   ____      _____  _______        
-      ___|\       |    | |    |   |      \/       \  
-     |    |\    \ |    | |    |  /          /\     \ 
-     |    | |    ||    | |    | /     /\   / /\     |
-     |    | /_ _/ |    | |    |      /\ \_/ / /    /|
-     |    |\      |    | |    ||    |  \|_|/ /    / |
-     |    | |   | |    | |    ||    |       |    |  |
-     |____|/____| |\___\_|____||____\       |____|  /
-     |    /     | | |    |    |||    |      |    | / 
-     |____|_____/  \|____|____| |____|      |____|/  
-       \(    )/       \(   )/     \(          )/     
-        '    '         '   '       '          '       
-Usage: bum <COMMAND>
+- You can just run `bum` without any parameter to see default help menu.
 
-Commands:
-  default  
-  use      
-  remove   
-  help     Print this message or the help of the given subcommand(s)
+### Features
 
-Options:
-  -h, --help  Print help
-```
-
-- The `bum use <version>` is to change the current active bun version
-   - e.g. `bum use 1.0.3`
-   - This will automatically use v1.0.3.
-   - If there's no target version is installed in the local, it will install that version then use it.
-   - Else, it will just use that version directly as the active version.
-- The `bum remove <version>` is to remove the installed locally.
-   - This feature will only remove local copy, but if you're using the removed version, you will still be able to use that version, but once you change to other version, you will not be able to change to that version anymore.
-   - In the future we will automatically switch to the latest version available upon removal of the version.
-- The `bum list` will show all local installed versions of Bun.
-- The `bum default <version>` will be implemented in the future.
+- `bum use <version>`
+  - Change the current active bun version, e.g. `bum use 1.0.3`. This will automatically use v1.0.3.
+  - If there's no target version is installed in the local, it will install that version then use it.
+  - Else, it will just use that version directly as the active version.
+- `bum remove <version>` 
+  - Remove the installed version locally.
+     > This feature will only remove local copy, but if you're using the removed version, you will still be able to use that version, but once you change to other version, you will not be able to change to that version anymore.
+  - In the future we will automatically switch to the latest version available upon removal of the version.
+- `bum list` 
+  - Show all local installed versions of Bun.
+- `bum default <version>` 
+  - Future features.
+- .bumrc file
+  - When file exists, everytime you use `bum use` command without `<version>` argument, Bum will try to get the version from the .bumrc file and install and use it for you.
 
 
-Any contribution is appreciated.
+> Any contribution is appreciated, have any doubts/questions/suggestions/ideas? Drop them in the Discussion page.
