@@ -384,7 +384,7 @@ dependencies = [
 
 [[package]]
 name = "bum"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "async-std",
  "cargo-watch",
