@@ -41,7 +41,7 @@ curl -fsSL https://github.com/owenizedd/bum/raw/main/install.sh | bash
 - `bum default <version>` 
   - Future features.
 - .bumrc file
-  - When file exists, everytime you use `bum use` command without `<version>` argument, Bum will try to get the version from the .bumrc file and install and use it for you.
+  - When file exists, everytime you use `bum use` command without `<version>` argument, Bum will try to use the version from the .bumrc file.
 
 
 > Any contribution is appreciated, have any doubts/questions/suggestions/ideas? Drop them in the Discussion page.
