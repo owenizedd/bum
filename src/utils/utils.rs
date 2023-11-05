@@ -133,18 +133,13 @@ pub fn get_bumrc_version() -> Result<String, &'static str> {
 }
 
 
-pub async fn get_github_tags(url: &str) -> Result<Vec<String>, Box<dyn Error>> {
-    
-    // Make a GET request to the GitHub API
-    
-    let client = reqwest::Client::builder().user_agent("bum").build().unwrap();
+pub async fn get_github_tags(url: &str) -> Result<Vec<String>, Box<dyn Error>> {    
+    let client = reqwest::Client::builder().user_agent("bum-version-manager-app").build().unwrap();
     let response = client.get(url).send().await?;
 
     let response_string = response.text().await?;
-    // print!("{}", response_string);
     let response_json: Value = serde_json::from_str(&response_string).unwrap();
 
-    // Extract version numbers and convert to a vector of strings only if string starts with "bun-"
     let tags_vec: Vec<String> = response_json
         .as_array()
         .unwrap()
