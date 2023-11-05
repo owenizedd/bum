@@ -2,14 +2,16 @@ use std::process::Command;
 use std::str;
 use std::fs;
 use std::io;
-use dirs::home_dir;
 use reqwest::{self};
+use serde_json::Value;
 use tokio::fs::File;
 use tokio::io::{ AsyncWriteExt, BufWriter};
 use std::error::Error as StdError; // Import std::error::Error
 use std::path::{Path, PathBuf};
 use std::error::Error;
+use serde_json::{self};
 
+use zip;
 pub fn get_architecture() -> &'static str {
   let output = Command::new("uname")
       .arg("-ms")
@@ -128,4 +130,27 @@ pub fn get_bumrc_version() -> Result<String, &'static str> {
     } else {
         Err("No .bumrc file found")
     }
+}
+
+
+pub async fn get_github_tags(url: &str) -> Result<Vec<String>, Box<dyn Error>> {
+    
+    // Make a GET request to the GitHub API
+    
+    let client = reqwest::Client::builder().user_agent("bum").build().unwrap();
+    let response = client.get(url).send().await?;
+
+    let response_string = response.text().await?;
+    // print!("{}", response_string);
+    let response_json: Value = serde_json::from_str(&response_string).unwrap();
+
+    // Extract version numbers and convert to a vector of strings only if string starts with "bun-"
+    let tags_vec: Vec<String> = response_json
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|tag| tag["name"].as_str().unwrap().to_string())
+        .filter(|tag| tag.starts_with("bun-"))
+        .collect();
+    Ok(tags_vec)
 }

@@ -6,7 +6,8 @@ pub use self::command::use_bun;
 pub use self::command::use_bumrc_version;
 pub use self::command::FOLDER_VERSION_BASE;
 pub use self::command::remove_bun;
-pub use self::command::display_versions_list;
+pub use self::command::display_version_list;
+pub use self::command::display_remote_version_list;
 
 
 pub use self::utils::download_zip;

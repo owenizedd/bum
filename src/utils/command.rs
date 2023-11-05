@@ -9,7 +9,7 @@ use std::error::Error;
 use std::io;
 use std::os::unix::fs::PermissionsExt;
 use owo_colors::{self, OwoColorize, DynColors};
-use super::utils::get_active_version;
+use super::utils::{get_active_version, get_github_tags};
 pub const FOLDER_VERSION_BASE: &str = "./bun-versions";
 
 
@@ -100,7 +100,7 @@ pub async fn remove_bun(version: &str) {
   }
 }
 
-pub fn display_versions_list() {
+pub fn display_version_list() {
   let mut versions_list: Vec<String> = Vec::new();
   let result = fs::read_dir(FOLDER_VERSION_BASE);
   
@@ -146,6 +146,23 @@ pub async fn use_bumrc_version(){
     },
     Err(e) => {
       println!("No version specified or {}, please use bum use <version> or use -h to print help", e);
+    }
+  }
+}
+
+pub async fn display_remote_version_list(){
+  let tags = get_github_tags("https://api.github.com/repos/oven-sh/bun/tags").await;
+
+  match tags {
+    Ok(tags) => {
+      for tag in tags {
+        //print tag of type () as string and remove suffix "bun-"
+        let tag_string = format!("{:?}", tag).replace("bun-", "").replace("\"", "");
+        println!("  {}", tag_string);
+      }
+    },
+    Err(e) => {
+      println!("Failed to get remote version list: {}", e);
     }
   }
 }
