@@ -156,7 +156,6 @@ pub async fn display_remote_version_list(){
   match tags {
     Ok(tags) => {
       for tag in tags {
-        //print tag of type () as string and remove suffix "bun-"
         let tag_string = format!("{:?}", tag).replace("bun-", "").replace("\"", "");
         println!("  {}", tag_string);
       }
