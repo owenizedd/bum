@@ -1,6 +1,6 @@
 use clap::Parser;
 mod utils;
-use utils::{command::use_bun, remove_bun, display_versions_list, use_bumrc_version};
+use utils::{command::use_bun, remove_bun, display_version_list, use_bumrc_version, display_remote_version_list};
 use owo_colors::{DynColors, OwoColorize};
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 #[derive(Parser)]
@@ -19,6 +19,7 @@ pub enum Command {
     Use(UseCommand),
     Remove(RemoveCommand),
     List(ListCommand),
+    ListRemote(ListRemoteCommand),
 }
 
 #[derive(Parser)]
@@ -38,6 +39,10 @@ pub struct RemoveCommand {
 
 #[derive(Parser)]
 pub struct ListCommand{
+
+}
+#[derive(Parser)]
+pub struct ListRemoteCommand{
 
 }
 
@@ -81,7 +86,10 @@ async fn run_commands(used_command: Option<Command>) {
             }
           },
           Command::List(_args) => {
-            display_versions_list()
+            display_version_list()
+          },
+          Command::ListRemote(_args) => {
+            display_remote_version_list().await;
           }
       } 
     },
