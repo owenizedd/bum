@@ -26,7 +26,7 @@ curl -fsSL https://github.com/owenizedd/bum/raw/main/install.sh | bash
 
 - You can just run `bum` without any parameter to see default help menu.
 
-### Features
+### Commands
 
 - `bum use <version>`
   - Change the current active bun version, e.g. `bum use 1.0.3`. This will automatically use v1.0.3.
@@ -38,10 +38,16 @@ curl -fsSL https://github.com/owenizedd/bum/raw/main/install.sh | bash
   - In the future we will automatically switch to the latest version available upon removal of the version.
 - `bum list` 
   - Show all local installed versions of Bun.
-- `bum default <version>` 
-  - Future features.
+- `bum list-remote` 
+  - Show all remote versions of Bun that could be installed.
+
 - .bumrc file
   - When file exists, everytime you use `bum use` command without `<version>` argument, Bum will try to use the version from the .bumrc file.
+
+### Future features (possibly)
+
+- `bum default <version>` 
+  - Future features.
 
 
 > Any contribution is appreciated, have any doubts/questions/suggestions/ideas? Drop them in the Discussion page.
