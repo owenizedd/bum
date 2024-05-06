@@ -39,10 +39,10 @@ jobs:
             os: macos-latest
             rust: stable
             target: aarch64-apple-darwin
-          - build: windows
-            os: windows-latest
-            rust: stable
-            target: x86_64-pc-windows-gnu
+          # - build: windows
+          #   os: windows-latest
+          #   rust: stable
+          #   target: x86_64-pc-windows-gnu
 
     steps:
       - name: Checkout
