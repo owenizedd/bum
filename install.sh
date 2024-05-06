@@ -7,24 +7,28 @@ fi
 
 case $(uname -ms) in
 'Darwin x86_64')
-	target=darwin-x86_64
+	target=x86_64-apple-darwin
 	;;
 'Darwin arm64')
-	target=darwin-aarch64
+	target=aarch64-apple-darwin
 	;;
 'Linux aarch64' | 'Linux arm64')
-	target=linux-aarch64
+	target=aarch64-unknown-linux-gnu
 	;;
 'Linux x86_64' | *)
-	target=linux-x86_64
+	target=x86_64-unknown-linux-gnu
 	;;
 esac
 
 GITHUB=${GITHUB-"https://github.com"}
 
+VERSION="v0.5.0"
+
 github_repo="$GITHUB/JulesGuesnon/bum"
 
-bum_uri=$github_repo/releases/latest/download/bum-$target
+bum_folder_name="bum-$VERSION-$target"
+
+bum_uri=$github_repo/releases/download/$VERSION/bum-$VERSION-"$target".tar.gz
 
 install_env=BUM_INSTALL
 bin_env=\$$install_env/bin
@@ -32,14 +36,23 @@ bin_env=\$$install_env/bin
 install_dir=${!install_env:-$HOME/.bum}
 bin_dir=$install_dir/bin
 exe=$bin_dir/bum
+exe_compressed=$bin_dir/bum.tar.gz
 
 if [[ ! -d $bin_dir ]]; then
 	mkdir -p "$bin_dir" ||
 		error "Failed to create install directory \"$bin_dir\""
 fi
 
-curl --fail --location --progress-bar --output "$exe" "$bum_uri" ||
+curl --fail --location --progress-bar --output "$exe_compressed" "$bum_uri" ||
 	error "Failed to download bum from \"$bum_uri\""
+
+tar -xvf "$exe_compressed" || error "Failed on decompress the executable"
+
+rm "$exe_compressed"
+
+mv "$bum_folder_name/bum" $exe
+
+rm -r $bum_folder_name
 
 chmod +x "$exe" ||
 	error 'Failed to set permissions on bum executable'
