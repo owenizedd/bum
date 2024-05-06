@@ -79,7 +79,7 @@ jobs:
           binary_name="bum"
 
           dirname="$binary_name-${{ env.VERSION }}-${{ matrix.target }}"
-          mkdir "$dirname"
+          mkdir -p "$dirname"
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
             mv "target/${{ matrix.target }}/release/$binary_name.exe" "$dirname"
           else
