@@ -5,6 +5,7 @@ use lazy_static::lazy_static;
 use owo_colors::{self, DynColors, OwoColorize};
 use resolve_path::PathResolveExt;
 use std::borrow::Cow;
+#[cfg(not(windows))]
 use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
 use tokio::fs::{remove_dir_all, File};
@@ -107,6 +108,8 @@ pub async fn activate_bun(bun_used_path: PathBuf) -> Result<()> {
     let metadata = fs::metadata(BUN_BIN_PATH.to_owned()).await?;
 
     let mut permissions = metadata.permissions();
+
+    #[cfg(not(windows))]
     permissions.set_mode(permissions.mode() | 0o111); // Add execute permission
 
     fs::set_permissions(BUN_BIN_PATH.to_owned(), permissions)
