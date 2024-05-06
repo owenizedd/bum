@@ -17,6 +17,7 @@ I initially needed a version for Mac OS ARM, so I forked the repo, but after loo
 
 - Adding ARM and Windows to targets
 - Installing all the versions in `~/.bum/bun-versions/` rather than `./bun-versions`
+- Supporting the `v` in front of version (`1.1.7 == v1.1.7`)
 
 ### Internal changes
 
