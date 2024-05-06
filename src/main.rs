@@ -1,7 +1,14 @@
+#![allow(clippy::all, clippy::pedantic)]
+
 use clap::Parser;
-mod utils;
-use utils::{command::use_bun, remove_bun, display_version_list, use_bumrc_version, display_remote_version_list};
 use owo_colors::{DynColors, OwoColorize};
+use utils::{
+    command::use_bun, display_remote_version_list, display_version_list, remove_bun,
+    use_bumrc_version,
+};
+
+mod utils;
+
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 #[derive(Parser)]
 #[command(arg_required_else_help = true)]
@@ -24,83 +31,73 @@ pub enum Command {
 
 #[derive(Parser)]
 pub struct DefaultCommand {
-    version: String
+    version: String,
 }
 
 #[derive(Parser)]
 pub struct UseCommand {
-    version: Option<String>
+    version: Option<String>,
 }
 
 #[derive(Parser)]
 pub struct RemoveCommand {
-    version: String
+    version: String,
 }
 
 #[derive(Parser)]
-pub struct ListCommand{
-
-}
+pub struct ListCommand {}
 #[derive(Parser)]
-pub struct ListRemoteCommand{
-
-}
+pub struct ListRemoteCommand {}
 
 #[tokio::main]
 pub async fn main() {
     let opts = Opts::try_parse();
-    
+
     match opts {
-      Ok(result) => {
-        if result.version {
-          println!("{}", VERSION);
-        } else {
-          run_commands(result.command).await;
-       }
-      },
-      Err(e) => {
-        print_default_message();
-        println!("{}", e);
-      }
+        Ok(result) => {
+            if result.version {
+                println!("{}", VERSION);
+            } else {
+                run_commands(result.command).await;
+            }
+        }
+        Err(e) => {
+            print_default_message();
+            println!("{}", e);
+        }
     }
 }
 
 async fn run_commands(used_command: Option<Command>) {
-  match used_command {
-    Some(command) =>  {
-      match command {
-          Command::Default(_args) => {
-            println!("This feature will be implemented in the future.");
-          },
-          Command::Remove(args) => {
-            remove_bun(&args.version).await;
-          }
-          Command::Use(args) => {
-            match args.version {
-              Some(version) => {
-                use_bun(&version).await;
-              },
-              None => {
-                use_bumrc_version().await;
-              }
+    match used_command {
+        Some(command) => match command {
+            Command::Default(_args) => {
+                println!("This feature will be implemented in the future.");
             }
-          },
-          Command::List(_args) => {
-            display_version_list()
-          },
-          Command::ListRemote(_args) => {
-            display_remote_version_list().await;
-          }
-      } 
-    },
-    None => {
-        println!("Use -h to print help")
+            Command::Remove(args) => {
+                remove_bun(&args.version).await;
+            }
+            Command::Use(args) => match args.version {
+                Some(version) => {
+                    use_bun(&version).await;
+                }
+                None => {
+                    use_bumrc_version().await;
+                }
+            },
+            Command::List(_args) => display_version_list(),
+            Command::ListRemote(_args) => {
+                display_remote_version_list().await;
+            }
+        },
+        None => {
+            println!("Use -h to print help")
+        }
     }
-  }
 }
 
 fn print_default_message() {
-  const BUM: &str = r#"         _____    ____   ____      ______  _______   
+    const BUM: &str = r#"         _____    ____   ____      ______  _______   
     ___|\     \  |    | |    |    |      \/       \  
    |    |\     \ |    | |    |   /          /\     \ 
    |    | |     ||    | |    |  /     /\   / /\     |
@@ -113,18 +110,13 @@ fn print_default_message() {
      \(    )/        \(   )/      \(          )/     
       '    '          '   '        '          '       "#;
 
-  let colors: [DynColors; 3] = [
-      "#f6e0b5", "#aa6f73", "#eea990",
-  ]
-  .map(|color| color.parse().unwrap());  
+    let colors: [DynColors; 3] =
+        ["#f6e0b5", "#aa6f73", "#eea990"].map(|color| color.parse().unwrap());
 
-  for line in BUM.split_inclusive('\n') {
-      
-      print!("{}", line[0..16].to_string().color(colors[0]));
-      print!("{}", line[17..33].to_string().color(colors[1]));
-      print!("{}", line[34..54].to_string().color(colors[2]));
-
-      
-  }
-  println!()                              
+    for line in BUM.split_inclusive('\n') {
+        print!("{}", line[0..16].to_string().color(colors[0]));
+        print!("{}", line[17..33].to_string().color(colors[1]));
+        print!("{}", line[34..54].to_string().color(colors[2]));
+    }
+    println!()
 }
