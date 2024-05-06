@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-VERSION="v0.5.0"
+VERSION="v0.6.0"
 
 if ! bun &>/dev/null; then
 	curl -fsSL https://bun.sh/install | bash
@@ -23,10 +23,6 @@ case arch in
 	target=x86_64-unknown-linux-gnu
 	;;
 esac
-
-if [[$arch == *"windows"*]]; then
-	target="TODO"
-fi
 
 GITHUB=${GITHUB-"https://github.com"}
 
