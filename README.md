@@ -3,7 +3,7 @@
 <img src="https://github.com/owenizedd/bum/assets/26961166/b231b1ff-dcde-4cc1-a0de-fa0f4964e54e" height="auto" width="150" style="border-radius:50%">
 <br/>
 
-<a href="https://github.com/owenizedd/bum/actions/workflows/rust.yml"><img alt="GitHub CI Status" src="https://img.shields.io/github/actions/workflow/status/owenizedd/bum/rust.yml?label=CI&logo=GitHub"></a> <br/>
+<a href="https://github.com/JulesGuesnon/bum/actions/workflows/deploy.yml"><img alt="GitHub CI Status" src="https://img.shields.io/github/actions/workflow/status/JulesGuesnon/bum/deploy.yml?label=CI&logo=GitHub"></a> <br/>
 
 Introducing Bum, a fast Bun version manager written in Rust from scratch.
 
@@ -15,7 +15,7 @@ I initially needed a version for Mac OS ARM, so I forked the repo, but after loo
 
 ### Main changes
 
-- Adding ARM to targets
+- Adding ARM and Windows to targets
 - Installing all the versions in `~/.bum/bun-versions/` rather than `./bun-versions`
 
 ### Internal changes
@@ -24,8 +24,11 @@ I initially needed a version for Mac OS ARM, so I forked the repo, but after loo
 - Converted all the `fs` and `io` code to `tokio` as it was using `std`
 - Made a simpler architecture
 - Added linting
+- Removed the dependences to Unix if that target is Windows
 
 ## How to install:
+
+## Unix
 
 1. Open your terminal and execute:
 
@@ -33,9 +36,17 @@ I initially needed a version for Mac OS ARM, so I forked the repo, but after loo
 curl -fsSL https://github.com/JulesGuesnon/bum/raw/main/install.sh | bash
 ```
 
-> This installation will install bun for you and also bum altogether.  
-> Bum is supported on **Linux x86_64** and **Darwin x86_64** (Mac OS)  
-> You can enter `uname -ms` command in your terminal to see yours 2. Restart terminal or `source ~/.zshrc` or `source ~/.bashrc` depending on your terminal.
+> This installation will install bun for you and also bum altogether.
+
+## Windows
+
+I only own a Mac, so I can't test at all if Windows is working, and I can't write a script to auto-install on Windows as well. So here are a few instructions on how to install Bum for Windows:
+
+1. Install [Bun](https://bun.sh/)
+2. Download the last exe in the [latest release](https://github.com/JulesGuesnon/bum/releases/latest), and unzip it
+3. Put the exe in your favorite directory, add the path to this directory in your PATH, and that's it!
+
+As Bum is not tested at all on Windows, it may not works. If it's the case please open an issue and I'll be glad to fix it.
 
 ## How to use:
 
