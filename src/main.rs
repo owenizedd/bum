@@ -1,18 +1,18 @@
 #![allow(clippy::all, clippy::pedantic)]
 
+use anyhow::Result;
 use clap::Parser;
+use commands::{list, list_remote, remove, use_bumrc, use_bun};
 use owo_colors::{DynColors, OwoColorize};
-use utils::{
-    command::use_bun, display_remote_version_list, display_version_list, remove_bun,
-    use_bumrc_version,
-};
 
+mod bun;
+mod commands;
 mod utils;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 #[derive(Parser)]
 #[command(arg_required_else_help = true)]
-pub struct Opts {
+pub struct Cli {
     #[clap(short, long)]
     version: bool,
 
@@ -51,14 +51,16 @@ pub struct ListRemoteCommand {}
 
 #[tokio::main]
 pub async fn main() {
-    let opts = Opts::try_parse();
+    let cli = Cli::try_parse();
 
-    match opts {
+    match cli {
         Ok(result) => {
             if result.version {
                 println!("{}", VERSION);
             } else {
-                run_commands(result.command).await;
+                if let Err(e) = run_commands(result.command).await {
+                    println!("An error occured during the execution: {e}");
+                };
             }
         }
         Err(e) => {
@@ -68,32 +70,34 @@ pub async fn main() {
     }
 }
 
-async fn run_commands(used_command: Option<Command>) {
-    match used_command {
-        Some(command) => match command {
-            Command::Default(_args) => {
-                println!("This feature will be implemented in the future.");
+async fn run_commands(used_command: Option<Command>) -> Result<()> {
+    if used_command.is_none() {
+        println!("Use -h to print help");
+
+        return Ok(());
+    }
+    match used_command.unwrap() {
+        Command::Default(_args) => {
+            println!("This feature will be implemented in the future.");
+        }
+        Command::Remove(args) => {
+            remove(&args.version).await;
+        }
+        Command::Use(args) => match args.version {
+            Some(version) => {
+                use_bun(&version).await?;
             }
-            Command::Remove(args) => {
-                remove_bun(&args.version).await;
-            }
-            Command::Use(args) => match args.version {
-                Some(version) => {
-                    use_bun(&version).await;
-                }
-                None => {
-                    use_bumrc_version().await;
-                }
-            },
-            Command::List(_args) => display_version_list(),
-            Command::ListRemote(_args) => {
-                display_remote_version_list().await;
+            None => {
+                use_bumrc().await?;
             }
         },
-        None => {
-            println!("Use -h to print help")
+        Command::List(_) => list().await?,
+        Command::ListRemote(_) => {
+            list_remote().await;
         }
     }
+
+    Ok(())
 }
 
 fn print_default_message() {

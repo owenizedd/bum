@@ -1,15 +1,29 @@
-## Bum - Bun Version Manager
+# Bum - Bun Version Manager
 
 <img src="https://github.com/owenizedd/bum/assets/26961166/b231b1ff-dcde-4cc1-a0de-fa0f4964e54e" height="auto" width="150" style="border-radius:50%">
 <br/>
 
 <a href="https://github.com/owenizedd/bum/actions/workflows/rust.yml"><img alt="GitHub CI Status" src="https://img.shields.io/github/actions/workflow/status/owenizedd/bum/rust.yml?label=CI&logo=GitHub"></a> <br/>
 
-# ⚠️ This fork is only here to release ARM version of the binary
-
 Introducing Bum, a fast Bun version manager written in Rust from scratch.
 
 <img src=".docs/bum-quick-demo.gif" width="600">
+
+## About the fork
+
+I initially needed a version for Mac OS ARM, so I forked the repo, but after looking at the code and using the project I wanted to make a few improvements. As it looks like the main repo maintainer is not available for now, I'm doing all the updates on this repo.
+
+### Main changes
+
+- Adding ARM to targets
+- Installing all the versions in `~/.bum/bun-versions/` rather than `./bun-versions`
+
+### Internal changes
+
+- Removed `std-async` as it was also using `tokio`. Removed unused deps as well
+- Converted all the `fs` and `io` code to `tokio` as it was using `std`
+- Made a simpler architecture
+- Added linting
 
 ## How to install:
 
