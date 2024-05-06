@@ -54,6 +54,7 @@ jobs:
 
       - name: Install libssl
         shell: bash
+        if: matrix.os == 'ubuntu-latest'
         run: sudo apt-get install libssl-dev
 
       - name: Install Rust
