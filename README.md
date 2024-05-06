@@ -24,7 +24,7 @@ I initially needed a version for Mac OS ARM, so I forked the repo, but after loo
 - Converted all the `fs` and `io` code to `tokio` as it was using `std`
 - Made a simpler architecture
 - Added linting
-- Removed the dependences to Unix if that target is Windows
+- Removed the dependences to Unix if the target is Windows
 
 ## How to install:
 
