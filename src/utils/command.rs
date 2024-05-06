@@ -1,27 +1,33 @@
 use super::utils::{get_active_version, get_github_tags};
 use crate::utils::utils;
 use async_std::fs::remove_dir_all;
-use dirs::home_dir;
+use lazy_static::lazy_static;
 use owo_colors::{self, DynColors, OwoColorize};
+use resolve_path::PathResolveExt;
+use std::borrow::Cow;
 use std::error::Error;
 use std::fs::{self, File};
 use std::io;
 use std::os::unix::fs::PermissionsExt;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use utils::check_folder_exists;
 
-pub const FOLDER_VERSION_BASE: &str = "./bun-versions";
+lazy_static! {
+    pub static ref FOLDER_VERSION_BASE: Cow<'static, Path> = "~/.bum/bun-versions".resolve();
+    pub static ref BUN_BIN_PATH: Cow<'static, Path> = "~/.bun/bin/bun".resolve();
+}
 
 pub async fn use_bun(version: &str) {
-    let home_path = home_dir();
     let arch = utils::get_architecture();
 
     let active_color: DynColors = "#eea990".parse().unwrap();
     let active_style = owo_colors::Style::new().color(active_color).bold();
 
-    if check_folder_exists(&format!("{}/{}", FOLDER_VERSION_BASE, version)) {
-        let bun_used_path = format!("{}/{}/bun-{}/bun", FOLDER_VERSION_BASE, version, arch);
-        match activate_bun(bun_used_path, home_path) {
+    let path_with_version = FOLDER_VERSION_BASE.join(version);
+
+    if check_folder_exists(&path_with_version) {
+        let bun_used_path = path_with_version.join(format!("bun-{}/bun", arch));
+        match activate_bun(bun_used_path) {
             Ok(()) => println!(
                 "Bun {} is activated.",
                 format!("v{}", version).style(active_style)
@@ -36,18 +42,22 @@ pub async fn use_bun(version: &str) {
             version, arch
         );
 
-        if fs::metadata(FOLDER_VERSION_BASE).is_err() {
-            let _ = fs::create_dir_all(FOLDER_VERSION_BASE);
+        if fs::metadata(FOLDER_VERSION_BASE.to_owned()).is_err() {
+            let _ = fs::create_dir_all(FOLDER_VERSION_BASE.to_owned());
         }
 
-        let zip_file_path = &format!("{}/{}.zip", FOLDER_VERSION_BASE, version);
-        let result = utils::download_zip(&github_bun_download_url, zip_file_path).await;
+        let zip_file_path = FOLDER_VERSION_BASE.join(format!("{}.zip", version));
+
+        let result = utils::download_zip(&github_bun_download_url, &zip_file_path).await;
         match result {
             Ok(()) => {
-                let _ = utils::unzip_file(zip_file_path, FOLDER_VERSION_BASE).await;
+                let _ = utils::unzip_file(&zip_file_path, &FOLDER_VERSION_BASE).await;
 
-                let bun_used_path = format!("{}/{}/bun-{}/bun", FOLDER_VERSION_BASE, version, arch);
-                match activate_bun(bun_used_path, home_path) {
+                let bun_used_path = FOLDER_VERSION_BASE
+                    .join(version)
+                    .join(format!("bun-{}/bun", arch));
+
+                match activate_bun(bun_used_path) {
                     Ok(()) => println!(
                         "Bun {} is activated.",
                         format!("v{}", version).style(active_style)
@@ -60,40 +70,25 @@ pub async fn use_bun(version: &str) {
     }
 }
 
-pub fn activate_bun(
-    bun_used_path: String,
-    home_path: Option<PathBuf>,
-) -> Result<(), Box<dyn Error>> {
-    match home_path {
-        Some(path) => {
-            path.into_os_string().into_string().ok().map(|home_path| {
-                let target_file = format!("{}/.bun/bin/bun", home_path);
+pub fn activate_bun(bun_used_path: PathBuf) -> Result<(), Box<dyn Error>> {
+    fs::remove_file(BUN_BIN_PATH.to_owned()).expect("Failed to delete the current bun bin");
+    let mut file_to_copy = File::open(bun_used_path).unwrap();
+    let mut file_target = File::create(BUN_BIN_PATH.to_owned()).unwrap();
+    io::copy(&mut file_to_copy, &mut file_target).expect("Faield to copy the bun bin");
 
-                let _ = fs::remove_file(target_file);
-                let mut file_to_copy = File::open(bun_used_path).unwrap();
-                let target_path = &format!("{}/.bun/bin/bun", home_path);
-                let mut file_target = File::create(target_path).unwrap();
-                let success = io::copy(&mut file_to_copy, &mut file_target);
+    fs::metadata(BUN_BIN_PATH.to_owned()).ok().map(|metadata| {
+        let mut permissions = metadata.permissions();
+        permissions.set_mode(permissions.mode() | 0o111); // Add execute permission
 
-                fs::metadata(target_path).ok().map(|metadata| {
-                    let mut permissions = metadata.permissions();
-                    permissions.set_mode(permissions.mode() | 0o111); // Add execute permission
+        fs::set_permissions(BUN_BIN_PATH.to_owned(), permissions).unwrap();
+        "File is now executable!"
+    });
 
-                    fs::set_permissions(target_path, permissions).unwrap();
-                    "File is now executable!"
-                });
-                success
-            });
-        }
-        None => println!("Failed to get home path"),
-    }
     Ok(())
 }
 
 pub async fn remove_bun(version: &str) {
-    // let home_path = home_dir();
-
-    let result = remove_dir_all(format!("{}/{}", FOLDER_VERSION_BASE, version)).await;
+    let result = remove_dir_all(FOLDER_VERSION_BASE.join(version)).await;
     match result {
         Ok(()) => {
             println!("v{} has been removed.", version);
@@ -109,7 +104,7 @@ pub async fn remove_bun(version: &str) {
 
 pub fn display_version_list() {
     let mut versions_list: Vec<String> = Vec::new();
-    let result = fs::read_dir(FOLDER_VERSION_BASE);
+    let result = fs::read_dir(FOLDER_VERSION_BASE.to_owned());
 
     match result {
         Ok(entries) => {
