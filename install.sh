@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+VERSION="v0.5.0"
+
 if ! bun &>/dev/null; then
 	curl -fsSL https://bun.sh/install | bash
 fi
 
-case $(uname -ms) in
+arch=$(uname -ms)
+
+case arch in
 'Darwin x86_64')
 	target=x86_64-apple-darwin
 	;;
@@ -20,9 +24,11 @@ case $(uname -ms) in
 	;;
 esac
 
-GITHUB=${GITHUB-"https://github.com"}
+if [[$arch == *"windows"*]]; then
+	target="TODO"
+fi
 
-VERSION="v0.5.0"
+GITHUB=${GITHUB-"https://github.com"}
 
 github_repo="$GITHUB/JulesGuesnon/bum"
 
