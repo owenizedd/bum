@@ -16,7 +16,7 @@ Introducing Bum, a fast Bun version manager written in Rust from scratch.
 1. Open your terminal and execute:
 
 ```
-curl -fsSL https://github.com/owenizedd/bum/raw/main/install.sh | bash
+curl -fsSL https://github.com/JulesGuesnon/bum/raw/main/install.sh | bash
 ```
 
 > This installation will install bun for you and also bum altogether.  
