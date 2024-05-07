@@ -10,7 +10,7 @@ use tokio::{
 };
 
 const BUN_GITHUB_TAGS_URL: &str = "https://api.github.com/repos/oven-sh/bun/tags";
-const BUN_BIN_NAME: &str = "bun";
+pub const BUN_BIN_NAME: &str = "bun";
 
 pub async fn get_active_version() -> String {
     //get active version by running bun -v
