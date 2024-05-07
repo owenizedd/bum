@@ -1,5 +1,5 @@
 use crate::bun;
-use crate::os;
+use crate::bun::BUN_BIN_NAME;
 use crate::utils;
 use anyhow::Result;
 use lazy_static::lazy_static;
@@ -43,16 +43,19 @@ pub async fn use_bun(version: &str) -> Result<()> {
     let path_with_version = FOLDER_VERSION_BASE.join(&version);
 
     if check_folder_exists(&path_with_version).await {
-        let arch = os::get_architecture();
+        let bun_used_path = path_with_version.join(BUN_BIN_NAME);
 
-        let bun_used_path = path_with_version.join(format!("bun-{}/bun", arch));
-        if let Ok(()) = activate_bun(bun_used_path).await {
-            println!(
-                "Bun {} is activated.",
-                format!("v{}", version).style(active_style)
-            );
-        } else {
-            println!("Failed to activate Bun v{}", version);
+        match activate_bun(bun_used_path).await {
+            Ok(()) => {
+                println!(
+                    "Bun {} is activated.",
+                    format!("v{}", version).style(active_style)
+                );
+            }
+            Err(e) => {
+                eprintln!("Failed to activate Bun v{}", version);
+                eprintln!("Reason: {e:?}");
+            }
         }
 
         return Ok(());
