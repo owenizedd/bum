@@ -7,6 +7,7 @@ use owo_colors::{DynColors, OwoColorize};
 
 mod bun;
 mod commands;
+mod os;
 mod utils;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
