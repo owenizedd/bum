@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-VERSION="v0.6.1"
+VERSION="v0.5.0"
 
 if ! bun &>/dev/null; then
 	curl -fsSL https://bun.sh/install | bash
@@ -26,7 +26,7 @@ esac
 
 GITHUB=${GITHUB-"https://github.com"}
 
-github_repo="$GITHUB/JulesGuesnon/bum"
+github_repo="$GITHUB/owenizedd/bum"
 
 bum_folder_name="bum-$VERSION-$target"
 
