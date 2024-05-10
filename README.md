@@ -3,7 +3,7 @@
 <img src="https://github.com/owenizedd/bum/assets/26961166/b231b1ff-dcde-4cc1-a0de-fa0f4964e54e" height="auto" width="150" style="border-radius:50%">
 <br/>
 
-<a href="https://github.com/owenizedd/bum/actions/workflows/deploy.yml"><img alt="GitHub CI Status" src="https://img.shields.io/github/actions/workflow/status/JulesGuesnon/bum/deploy.yml?label=CI&logo=GitHub"></a> <br/>
+<a href="https://github.com/owenizedd/bum/actions/workflows/deploy.yml"><img alt="GitHub CI Status" src="https://img.shields.io/github/actions/workflow/status/owenizedd/bum/deploy.yml?label=CI&logo=GitHub"></a> <br/>
 
 Introducing Bum, a fast Bun version manager written in Rust from scratch.
 
@@ -26,7 +26,7 @@ curl -fsSL https://github.com/owenizedd/bum/raw/main/install.sh | bash
 I only own a Mac, so I can't test at all if Windows is working, and I can't write a script to auto-install on Windows as well. So here are a few instructions on how to install Bum for Windows:
 
 1. Install [Bun](https://bun.sh/)
-2. Download the last exe in the [latest release](https://github.com/JulesGuesnon/bum/releases/latest), and unzip it
+2. Download the last exe in the [latest release](https://github.com/owenizedd/bum/releases/latest), and unzip it
 3. Put the exe in your favorite directory, add the path to this directory in your PATH, and that's it!
 
 As Bum is not tested at all on Windows, it may not works. If it's the case please open an issue and I'll be glad to fix it.
