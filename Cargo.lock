@@ -142,7 +142,7 @@ dependencies = [
 
 [[package]]
 name = "bum"
-version = "0.6.1"
+version = "0.5.0"
 dependencies = [
  "anyhow",
  "clap",
