@@ -56,6 +56,8 @@ mv "$bum_folder_name/bum" $exe
 
 rm -r $bum_folder_name
 
+mkdir -p "$install_dir/bun-versions"
+
 chmod +x "$exe" ||
 	error 'Failed to set permissions on bum executable'
 
