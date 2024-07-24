@@ -1,6 +1,6 @@
 # Bum - Bun Version Manager
 
-<img src="https://github.com/owenizedd/bum/assets/26961166/b231b1ff-dcde-4cc1-a0de-fa0f4964e54e" height="auto" width="150" style="border-radius:50%">
+<img src=".docs/new-logo.jpg" height="auto" width="150" style="border-radius:50%">
 <br/>
 
 <a href="https://github.com/owenizedd/bum/actions/workflows/deploy.yml"><img alt="GitHub CI Status" src="https://img.shields.io/github/actions/workflow/status/owenizedd/bum/deploy.yml?label=CI&logo=GitHub"></a> <br/>
