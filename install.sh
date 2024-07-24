@@ -9,7 +9,7 @@ fi
 
 arch=$(uname -ms)
 
-case arch in
+case $arch in
 'Darwin x86_64')
 	target=x86_64-apple-darwin
 	;;
