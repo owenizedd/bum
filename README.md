@@ -3,8 +3,12 @@
 <img src=".docs/new-logo.jpg" height="auto" width="150" style="border-radius:50%">
 <br/>
 
-<a href="https://github.com/owenizedd/bum/actions/workflows/deploy.yml"><img alt="GitHub CI Status" src="https://img.shields.io/github/actions/workflow/status/owenizedd/bum/deploy.yml?label=CI&logo=GitHub"></a> <br/>
+<div style="display: flex; gap: 1; align-items: center;">
+<a href="https://github.com/owenizedd/bum/actions/workflows/deploy.yml"><img alt="GitHub CI Status" src="https://img.shields.io/github/actions/workflow/status/owenizedd/bum/deploy.yml?label=CI&logo=GitHub"></a> 
 
+<img src="https://img.shields.io/badge/Made%20with-Rust-orange?style=for-the-badge&logo=Rust" height="20px">
+</div>
+<br/>
 Introducing Bum, a fast Bun version manager written in Rust from scratch.
 
 <img src=".docs/bum-quick-demo.gif" width="600">
