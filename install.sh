@@ -44,6 +44,25 @@ success() {
     echo -e "${Green}$@ ${Color_Off}"
 }
 
+add_to_config() {
+    local config_file="$1"
+    local marker="# bum"
+    shift
+    local commands=("$@")
+
+    if grep -q "^$marker" "$config_file" 2>/dev/null; then
+        info "Configuration block already present in $config_file, skipping addition."
+        return
+    fi
+
+    echo -e "\n$marker" >> "$config_file"
+    for command in "${commands[@]}"; do
+        echo "$command" >> "$config_file"
+    done
+
+    info "Added configuration block to $config_file."
+}
+
 arch=$(uname -ms)
 
 case $arch in
@@ -138,7 +157,7 @@ tildify() {
 	fi
 }
 
-echo "bum was installed successfully to  "$exe""
+echo "bum was installed successfully to "$exe""
 
 refresh_command=''
 
@@ -162,15 +181,7 @@ fish)
 	tilde_fish_config=$(tildify "$fish_config")
 
 	if [[ -w $fish_config ]]; then
-		{
-			echo -e '\n# bum'
-
-			for command in "${commands[@]}"; do
-				echo "$command"
-			done
-		} >>"$fish_config"
-
-		info "Added \"$tilde_bin_dir\" to \$PATH in \"$tilde_fish_config\""
+		add_to_config "$fish_config" "${commands[@]}"
 
 		refresh_command="source $tilde_fish_config"
 	else
@@ -192,13 +203,7 @@ zsh)
 	tilde_zsh_config=$(tildify "$zsh_config")
 
 	if [[ -w $zsh_config ]]; then
-		{
-			echo -e '\n# bum'
-
-			for command in "${commands[@]}"; do
-				echo "$command"
-			done
-		} >>"$zsh_config"
+		add_to_config "$zsh_config" "${commands[@]}"
 
 		refresh_command="exec $SHELL"
 	else
@@ -235,15 +240,7 @@ bash)
 		tilde_bash_config=$(tildify "$bash_config")
 
 		if [[ -w $bash_config ]]; then
-			{
-				echo -e '\n# bum'
-
-				for command in "${commands[@]}"; do
-					echo "$command"
-				done
-			} >>"$bash_config"
-
-			info "Added \"$tilde_bin_dir\" to \$PATH in \"$tilde_bash_config\""
+			add_to_config "$bash_config" "${commands[@]}"
 
 			refresh_command="source $bash_config"
 			set_manually=false
