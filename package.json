@@ -45,7 +45,9 @@
   },
   "scripts": {
     "artifacts": "napi artifacts",
-    "build": "napi build --platform --release && bun build bin.ts --outdir . --target node --format cjs",
+    "build": "npm run build:napi && npm run build:bin",
+    "build:napi": "napi build --platform --release",
+    "build:bin": "bun build bin.ts --outdir . --target node --format cjs",
     "build:debug": "napi build --platform && bun build bin.ts --outdir . --target node --format cjs",
     "prepublishOnly": "napi prepublish -t npm",
     "test": "echo \"No tests yet\"",
