@@ -283,8 +283,18 @@ jobs:
           ls -R artifacts/
       - name: Clean up hashed files
         run: |
-          echo "Removing hashed .node files..."
-          find artifacts -name "*.node" -name "*-*-*.node" -type f -delete
+          echo "Removing hashed .node files (format: platform-HASH.node)..."
+          # Remove files like: bum.darwin-arm64-abc123.node
+          # Keep files like: bum.darwin-arm64.node, bum.linux-x64-gnu.node
+          find artifacts -type f -name "*.node" | while read file; do
+            basename=$(basename "$file")
+            # If filename has more than 3 dashes (e.g. bum.darwin-arm64-HASH.node has 3 dashes)
+            # and ends with a hash pattern, remove it
+            if echo "$basename" | grep -E '.*-[a-z0-9]{8}\.node$' > /dev/null; then
+              echo "Removing: $basename"
+              rm "$file"
+            fi
+          done
           echo "Remaining .node files:"
           find artifacts -name "*.node" -type f
       - name: Move artifacts to npm folders
@@ -319,6 +329,33 @@ jobs:
             echo "📁 $dir"
             ls -lh "$dir"*.node 2>/dev/null || echo "  ⚠️  No .node file"
           done
+      - name: Publish platform packages
+        run: |
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+          
+          for dir in npm/*/; do
+            platform=$(basename "$dir")
+            if [ -f "$dir"/*.node ]; then
+              echo "📦 Publishing @owenizedd/bum-$platform..."
+              cd "$dir"
+              if npm publish --access public 2>&1 | tee publish.log; then
+                echo "✅ Published @owenizedd/bum-$platform"
+              else
+                if grep -q "cannot publish over the previously published\|You cannot publish over previously published versions" publish.log; then
+                  echo "⚠️  @owenizedd/bum-$platform already published, skipping..."
+                else
+                  echo "❌ Failed to publish @owenizedd/bum-$platform"
+                  cat publish.log
+                  exit 1
+                fi
+              fi
+              cd ../..
+            else
+              echo "⚠️  Skipping $platform (no .node file)"
+            fi
+          done
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: List packages
         run: ls -R ./npm
         shell: bash

@@ -50,7 +50,6 @@
     "build:napi": "napi build --platform --release",
     "build:bin": "bun build bin.ts --outdir . --target node --format cjs",
     "build:debug": "napi build --platform && bun build bin.ts --outdir . --target node --format cjs",
-    "prepublishOnly": "napi prepublish -t npm --skip-gh-release",
     "test": "echo \"No tests yet\"",
     "universal": "napi universal -d .",
     "version": "napi version"
@@ -58,5 +57,15 @@
   "packageManager": "bun@1.3.0",
   "devDependencies": {
     "@napi-rs/cli": "^2.18.4"
+  },
+  "optionalDependencies": {
+    "@owenizedd/bum-win32-x64-msvc": "0.7.5",
+    "@owenizedd/bum-darwin-x64": "0.7.5",
+    "@owenizedd/bum-linux-x64-gnu": "0.7.5",
+    "@owenizedd/bum-linux-x64-musl": "0.7.5",
+    "@owenizedd/bum-linux-arm64-gnu": "0.7.5",
+    "@owenizedd/bum-linux-arm64-musl": "0.7.5",
+    "@owenizedd/bum-darwin-arm64": "0.7.5",
+    "@owenizedd/bum-darwin-universal": "0.7.5"
   }
 }
