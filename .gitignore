@@ -6,6 +6,3 @@
 node_modules
 .cargo-cache
 dist
-
-# Generated from bin.ts
-bin.js

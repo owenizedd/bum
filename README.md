@@ -77,4 +77,22 @@ As Bum is not tested at all on Windows, it may not works. If it's the case pleas
 
 - `bum default <version>`
 
-> Any contribution is appreciated, have any doubts/questions/suggestions/ideas? Drop them in the Discussion page.
+## Contributing
+
+We welcome contributions! Please see our [Contributing Guide](./docs/CONTRIBUTING.md) for details on:
+- Development setup
+- Running tests
+- Code style guidelines
+- Pull request process
+
+For maintainers releasing new versions, see the [Release Guide](./docs/RELEASE.md).
+
+## Questions or Issues?
+
+- 💬 Have questions? Open a [Discussion](https://github.com/owenizedd/bum/discussions)
+- 🐛 Found a bug? Open an [Issue](https://github.com/owenizedd/bum/issues)
+- 💡 Have ideas? We'd love to hear them!
+
+## License
+
+MIT

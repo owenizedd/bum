@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-VERSION="v0.7.0"
+VERSION="v0.7.1"
 
 if ! bun &>/dev/null; then
 	curl -fsSL https://bun.sh/install | bash
@@ -86,8 +86,38 @@ if [[ ! -d $bin_dir ]]; then
 		error "Failed to create install directory \"$bin_dir\""
 fi
 
-curl --fail --location --progress-bar --output "$exe_compressed" "$bum_uri" ||
-	error "Failed to download bum from \"$bum_uri\""
+# Retry function with exponential backoff
+download_with_retry() {
+	local url=$1
+	local output=$2
+	local max_attempts=3
+	local timeout=30
+	local attempt=1
+	local wait_time=2
+
+	while [ $attempt -le $max_attempts ]; do
+		info "Downloading bum (attempt $attempt/$max_attempts)..."
+		
+		if curl --fail --location --progress-bar --max-time "$timeout" --output "$output" "$url"; then
+			success "Download successful!"
+			return 0
+		fi
+		
+		if [ $attempt -lt $max_attempts ]; then
+			info "Download failed. Retrying in ${wait_time}s..."
+			sleep $wait_time
+			wait_time=$((wait_time * 2))  # Exponential backoff
+			timeout=$((timeout + 30))      # Increase timeout for next attempt
+		fi
+		
+		attempt=$((attempt + 1))
+	done
+	
+	return 1
+}
+
+download_with_retry "$bum_uri" "$exe_compressed" ||
+	error "Failed to download bum from \"$bum_uri\" after $max_attempts attempts"
 
 tar -xvf "$exe_compressed" || error "Failed on decompress the executable"
 
