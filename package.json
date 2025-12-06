@@ -32,6 +32,7 @@
         "aarch64-unknown-linux-musl",
         "aarch64-apple-darwin",
         "x86_64-apple-darwin",
+        "universal-apple-darwin",
         "x86_64-pc-windows-msvc"
       ]
     }
