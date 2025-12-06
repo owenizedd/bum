@@ -50,10 +50,11 @@ jobs:
       fail-fast: false
       matrix:
         settings:
-          - host: macos-latest
+          - host: macos-13
             target: x86_64-apple-darwin
             build: |
-              bun run build
+              bun run build:napi --target x86_64-apple-darwin
+              bun run build:bin
               strip -x *.node
           - host: windows-latest
             build: bun run build
