@@ -56,7 +56,7 @@ jobs:
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
             build: |-
               set -e &&
-              apk add --no-cache perl make &&
+              apk add --no-cache perl make musl-dev gcc &&
               corepack enable &&
               npm install -g bun &&
               bun install &&
@@ -78,7 +78,7 @@ jobs:
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
             build: |-
               set -e &&
-              apk add --no-cache perl make &&
+              apk add --no-cache perl make musl-dev gcc &&
               rustup target add aarch64-unknown-linux-musl &&
               corepack enable &&
               npm install -g bun &&
