@@ -1,0 +1,30 @@
+{
+  "name": "@owenizedd/bum-linux-x64-musl",
+  "version": "0.6.1",
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "libc": [
+    "musl"
+  ],
+  "main": "bum.linux-x64-musl.node",
+  "files": [
+    "bum.linux-x64-musl.node"
+  ],
+  "description": "Fast Bun version manager written in Rust",
+  "keywords": [
+    "bun",
+    "version-manager",
+    "rust",
+    "cli"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/owenizedd/bum.git"
+  }
+}
+

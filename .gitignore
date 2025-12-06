@@ -1,2 +1,11 @@
 /target
 .DS_Store
+
+# napi-rs
+*.node
+node_modules
+.cargo-cache
+dist
+
+# Generated from bin.ts
+bin.js

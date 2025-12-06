@@ -1,0 +1,26 @@
+{
+  "name": "@owenizedd/bum-darwin-arm64",
+  "version": "0.6.1",
+  "os": [
+    "darwin"
+  ],
+  "cpu": [
+    "arm64"
+  ],
+  "main": "bum.darwin-arm64.node",
+  "files": [
+    "bum.darwin-arm64.node"
+  ],
+  "description": "Fast Bun version manager written in Rust",
+  "keywords": [
+    "bun",
+    "version-manager",
+    "rust",
+    "cli"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/owenizedd/bum.git"
+  }
+}
