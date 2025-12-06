@@ -1,6 +1,6 @@
 {
   "name": "@owenizedd/bum-darwin-universal",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "os": [
     "darwin"
   ],
@@ -21,4 +21,3 @@
     "url": "git+https://github.com/owenizedd/bum.git"
   }
 }
-

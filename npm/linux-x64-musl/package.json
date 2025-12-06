@@ -1,6 +1,6 @@
 {
   "name": "@owenizedd/bum-linux-x64-musl",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "os": [
     "linux"
   ],
@@ -27,4 +27,3 @@
     "url": "git+https://github.com/owenizedd/bum.git"
   }
 }
-
