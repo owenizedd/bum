@@ -278,14 +278,48 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: artifacts
+      - name: List artifacts structure
+        run: |
+          echo "Artifacts structure:"
+          ls -R artifacts/
       - name: Clean up hashed files
         run: |
           echo "Removing hashed .node files..."
           find artifacts -name "*.node" -name "*-*-*.node" -type f -delete
-          echo "Remaining files:"
+          echo "Remaining .node files:"
           find artifacts -name "*.node" -type f
-      - name: Move artifacts
-        run: bun run artifacts
+      - name: Move artifacts to npm folders
+        run: |
+          # Move each platform's .node file to the correct npm/ folder
+          for artifact_dir in artifacts/bindings-*/; do
+            platform=$(basename "$artifact_dir" | sed 's/bindings-//')
+            node_file=$(find "$artifact_dir" -name "*.node" -type f | head -1)
+            
+            if [ -n "$node_file" ]; then
+              # Map platform name to npm folder name
+              case "$platform" in
+                "aarch64-apple-darwin") npm_dir="darwin-arm64" ;;
+                "x86_64-apple-darwin") npm_dir="darwin-x64" ;;
+                "universal-apple-darwin") npm_dir="darwin-universal" ;;
+                "x86_64-unknown-linux-gnu") npm_dir="linux-x64-gnu" ;;
+                "x86_64-unknown-linux-musl") npm_dir="linux-x64-musl" ;;
+                "aarch64-unknown-linux-gnu") npm_dir="linux-arm64-gnu" ;;
+                "aarch64-unknown-linux-musl") npm_dir="linux-arm64-musl" ;;
+                "x86_64-pc-windows-msvc") npm_dir="win32-x64-msvc" ;;
+                *) echo "Unknown platform: $platform"; continue ;;
+              esac
+              
+              cp "$node_file" "npm/$npm_dir/"
+              echo "✅ Copied $(basename $node_file) to npm/$npm_dir/"
+            fi
+          done
+      - name: Verify npm folders
+        run: |
+          echo "Checking npm folders:"
+          for dir in npm/*/; do
+            echo "📁 $dir"
+            ls -lh "$dir"*.node 2>/dev/null || echo "  ⚠️  No .node file"
+          done
       - name: List packages
         run: ls -R ./npm
         shell: bash
