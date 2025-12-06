@@ -226,9 +226,19 @@ jobs:
           name: bindings-aarch64-apple-darwin
           path: .
       - name: List downloaded files
-        run: ls -la *.node
+        run: |
+          echo "Current directory: $(pwd)"
+          ls -la *.node || true
+          echo "---"
+          ls -la
+      - name: Clean up hashed files
+        run: |
+          rm -f bum.darwin-*-*.node
+          ls -la *.node
       - name: Combine binaries
-        run: bun run universal
+        run: |
+          echo "Running napi universal from: $(pwd)"
+          npx napi universal -o .
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
