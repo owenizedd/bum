@@ -19,7 +19,6 @@ permissions:
       - "**/*.gitignore"
       - .editorconfig
       - docs/**
-  pull_request: null
 jobs:
   test:
     name: Test
