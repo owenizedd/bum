@@ -218,14 +218,14 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-x86_64-apple-darwin
-          path: artifacts
+          path: .
       - name: Download macOS arm64 artifact
         uses: actions/download-artifact@v4
         with:
           name: bindings-aarch64-apple-darwin
-          path: artifacts
-      - name: Move artifacts to root
-        run: mv artifacts/*.node .
+          path: .
+      - name: List downloaded files
+        run: ls -la *.node
       - name: Combine binaries
         run: bun run universal
       - name: Upload artifact
