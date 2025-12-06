@@ -1,6 +1,6 @@
 {
   "name": "@owenizedd/bum",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "Fast Bun version manager written in Rust",
   "main": "index.js",
   "types": "index.d.ts",
@@ -60,4 +60,3 @@
     "@napi-rs/cli": "^2.18.4"
   }
 }
-
