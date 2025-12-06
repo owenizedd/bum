@@ -83,7 +83,7 @@ jobs:
               corepack enable &&
               npm install -g bun &&
               bun install &&
-              bun run build:napi --target aarch64-unknown-linux-musl &&
+              CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER=/aarch64-linux-musl-cross/bin/aarch64-linux-musl-gcc CC_aarch64_unknown_linux_musl=/aarch64-linux-musl-cross/bin/aarch64-linux-musl-gcc bun run build:napi --target aarch64-unknown-linux-musl &&
               bun run build:bin &&
               /aarch64-linux-musl-cross/bin/aarch64-linux-musl-strip *.node
     name: stable - ${{ matrix.settings.target }} - node@22
