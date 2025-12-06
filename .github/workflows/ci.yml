@@ -54,6 +54,7 @@ jobs:
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
             build: |-
               set -e &&
+              apk add --no-cache perl make &&
               corepack enable &&
               npm install -g bun &&
               bun install &&
@@ -74,6 +75,7 @@ jobs:
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
             build: |-
               set -e &&
+              apk add --no-cache perl make &&
               rustup target add aarch64-unknown-linux-musl &&
               corepack enable &&
               npm install -g bun &&
@@ -89,11 +91,16 @@ jobs:
         if: ${{ !matrix.settings.docker }}
         with:
           node-version: 22
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - name: Install Bum
         if: ${{ !matrix.settings.docker }}
-        with:
-          bun-version: latest
+        run: |
+          curl -fsSL https://github.com/owenizedd/bum/raw/main/install.sh | bash
+          echo "$HOME/.bun/bin" >> $GITHUB_PATH
+        shell: bash
+      - name: Use Bun via Bum
+        if: ${{ !matrix.settings.docker }}
+        run: bum use 1.3.0
+        shell: bash
       - name: Install
         uses: dtolnay/rust-toolchain@stable
         if: ${{ !matrix.settings.docker }}
@@ -160,10 +167,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
+      - name: Install Bum
+        run: |
+          curl -fsSL https://github.com/owenizedd/bum/raw/main/install.sh | bash
+          echo "$HOME/.bun/bin" >> $GITHUB_PATH
+        shell: bash
+      - name: Use Bun via Bum
+        run: bum use 1.3.0
+        shell: bash
       - name: Install dependencies
         run: bun install
       - name: Download macOS x64 artifact
@@ -197,10 +208,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
+      - name: Install Bum
+        run: |
+          curl -fsSL https://github.com/owenizedd/bum/raw/main/install.sh | bash
+          echo "$HOME/.bun/bin" >> $GITHUB_PATH
+        shell: bash
+      - name: Use Bun via Bum
+        run: bum use 1.3.0
+        shell: bash
       - name: Install dependencies
         run: bun install
       - name: Download all artifacts
