@@ -45,6 +45,7 @@ jobs:
             build: |-
               set -e &&
               corepack enable &&
+              npm install -g bun &&
               bun install &&
               bun run build --target x86_64-unknown-linux-gnu &&
               strip *.node
@@ -54,6 +55,7 @@ jobs:
             build: |-
               set -e &&
               corepack enable &&
+              npm install -g bun &&
               bun install &&
               bun run build &&
               strip *.node
@@ -63,6 +65,7 @@ jobs:
             build: |-
               set -e &&
               corepack enable &&
+              npm install -g bun &&
               bun install &&
               bun run build --target aarch64-unknown-linux-gnu &&
               aarch64-unknown-linux-gnu-strip *.node
@@ -73,10 +76,11 @@ jobs:
               set -e &&
               rustup target add aarch64-unknown-linux-musl &&
               corepack enable &&
+              npm install -g bun &&
               bun install &&
               bun run build --target aarch64-unknown-linux-musl &&
               /aarch64-linux-musl-cross/bin/aarch64-linux-musl-strip *.node
-    name: stable - ${{ matrix.settings.target }} - node@18
+    name: stable - ${{ matrix.settings.target }} - node@22
     runs-on: ${{ matrix.settings.host }}
     steps:
       - uses: actions/checkout@v4
@@ -84,7 +88,7 @@ jobs:
         uses: actions/setup-node@v4
         if: ${{ !matrix.settings.docker }}
         with:
-          node-version: 18
+          node-version: 22
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         if: ${{ !matrix.settings.docker }}
@@ -122,7 +126,7 @@ jobs:
         uses: actions/setup-node@v4
         if: matrix.settings.target == 'i686-pc-windows-msvc'
         with:
-          node-version: 18
+          node-version: 22
           architecture: x86
       - name: Install dependencies
         run: bun install
@@ -192,7 +196,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
