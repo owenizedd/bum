@@ -233,6 +233,12 @@ jobs:
         run: |
           mv artifacts/*.node .
           ls -la *.node
+      - name: Clean up hashed files
+        run: |
+          echo "Removing hashed files..."
+          rm -f bum.darwin-*-*.node
+          echo "Files after cleanup:"
+          ls -la *.node
       - name: Combine binaries
         run: |
           bun run universal
