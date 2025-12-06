@@ -332,7 +332,7 @@ jobs:
       - name: Publish platform packages
         run: |
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-          
+
           for dir in npm/*/; do
             platform=$(basename "$dir")
             if [ -f "$dir"/*.node ]; then
