@@ -295,7 +295,20 @@ jobs:
           if git describe --exact-match --tags HEAD 2>/dev/null | grep "^v[0-9]\+\.[0-9]\+\.[0-9]\+$";
           then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            npm publish --access public
+            
+            # Try to publish, but don't fail if version already exists
+            if npm publish --access public 2>&1 | tee publish.log; then
+              echo "✅ Published successfully"
+            else
+              if grep -q "cannot publish over the previously published" publish.log || grep -q "You cannot publish over previously published versions" publish.log; then
+                echo "⚠️  Version already published, skipping..."
+                exit 0
+              else
+                echo "❌ Publish failed with unexpected error"
+                cat publish.log
+                exit 1
+              fi
+            fi
           else
             echo "Not a release tag, skipping publish"
           fi

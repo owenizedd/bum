@@ -1,6 +1,6 @@
 {
   "name": "@owenizedd/bum",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Fast Bun version manager written in Rust",
   "main": "index.js",
   "types": "index.d.ts",
@@ -50,7 +50,7 @@
     "build:napi": "napi build --platform --release",
     "build:bin": "bun build bin.ts --outdir . --target node --format cjs",
     "build:debug": "napi build --platform && bun build bin.ts --outdir . --target node --format cjs",
-    "prepublishOnly": "napi prepublish -t npm",
+    "prepublishOnly": "napi prepublish -t npm --no-gh-release",
     "test": "echo \"No tests yet\"",
     "universal": "napi universal -d .",
     "version": "napi version"
