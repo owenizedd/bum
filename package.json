@@ -52,7 +52,7 @@
     "build:debug": "napi build --platform && bun build bin.ts --outdir . --target node --format cjs",
     "prepublishOnly": "napi prepublish -t npm",
     "test": "echo \"No tests yet\"",
-    "universal": "napi universal",
+    "universal": "napi universal -d .",
     "version": "napi version"
   },
   "packageManager": "bun@1.3.0",
