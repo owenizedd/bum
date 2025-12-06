@@ -50,7 +50,7 @@
     "build:napi": "napi build --platform --release",
     "build:bin": "bun build bin.ts --outdir . --target node --format cjs",
     "build:debug": "napi build --platform && bun build bin.ts --outdir . --target node --format cjs",
-    "prepublishOnly": "napi prepublish -t npm --no-gh-release",
+    "prepublishOnly": "napi prepublish -t npm --skip-gh-release",
     "test": "echo \"No tests yet\"",
     "universal": "napi universal -d .",
     "version": "napi version"

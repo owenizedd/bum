@@ -261,17 +261,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Install Bum
-        run: |
-          curl -fsSL https://github.com/owenizedd/bum/raw/main/install.sh | bash
-          echo "$HOME/.bum/bin" >> $GITHUB_PATH
-          echo "$HOME/.bun/bin" >> $GITHUB_PATH
-        shell: bash
-      - name: Use Bun via Bum
-        run: |
-          export PATH="$HOME/.bum/bin:$PATH"
-          bum use 1.3.0
-        shell: bash
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.3.0"
       - name: Install dependencies
         run: bun install
       - name: Download all artifacts
