@@ -224,6 +224,8 @@ jobs:
         with:
           name: bindings-aarch64-apple-darwin
           path: artifacts
+      - name: Move artifacts to root
+        run: mv artifacts/*.node .
       - name: Combine binaries
         run: bun run universal
       - name: Upload artifact
