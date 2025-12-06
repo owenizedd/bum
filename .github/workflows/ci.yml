@@ -242,6 +242,12 @@ jobs:
         run: |
           bun run universal
           ls -la *.node
+      - name: Clean up individual arch files before upload
+        run: |
+          echo "Removing individual arch files to avoid duplicates..."
+          rm -f bum.darwin-x64.node bum.darwin-arm64.node
+          echo "Files to be uploaded:"
+          ls -la *.node
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
