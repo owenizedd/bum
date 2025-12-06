@@ -201,7 +201,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
       - name: Install Bum
         run: |
           curl -fsSL https://github.com/owenizedd/bum/raw/main/install.sh | bash
@@ -219,37 +219,24 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-x86_64-apple-darwin
-          path: .
+          path: artifacts
       - name: Download macOS arm64 artifact
         uses: actions/download-artifact@v4
         with:
           name: bindings-aarch64-apple-darwin
-          path: .
+          path: artifacts
       - name: List downloaded files
         run: |
           echo "Current directory: $(pwd)"
-          ls -la *.node || true
-      - name: Clean up hashed files and verify
+          ls -la artifacts/
+      - name: Move artifacts to root
         run: |
-          rm -f bum.darwin-*-*.node
-          echo "Files after cleanup:"
+          mv artifacts/*.node .
           ls -la *.node
-          # Verify required files exist
-          if [ ! -f "bum.darwin-x64.node" ]; then
-            echo "Error: bum.darwin-x64.node not found"
-            exit 1
-          fi
-          if [ ! -f "bum.darwin-arm64.node" ]; then
-            echo "Error: bum.darwin-arm64.node not found"
-            exit 1
-          fi
-          echo "Both required files found!"
       - name: Combine binaries
         run: |
-          echo "Running napi universal..."
           bun run universal
-          echo "Universal binary created:"
-          ls -la bum.darwin-universal.node
+          ls -la *.node
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
