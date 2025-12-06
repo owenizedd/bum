@@ -1,6 +1,6 @@
 {
   "name": "@owenizedd/bum",
-  "version": "0.7.3",
+  "version": "0.7.5",
   "description": "Fast Bun version manager written in Rust",
   "main": "index.js",
   "types": "index.d.ts",
