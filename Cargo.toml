@@ -1,6 +1,6 @@
 [package]
 name = "bum"
-version = "0.6.1"
+version = "0.7.0"
 edition = "2021"
 
 [lib]
@@ -16,7 +16,10 @@ path = "src/main.rs"
 napi = "2.16"
 napi-derive = "2.16"
 # Use rustls instead of native-tls to avoid OpenSSL cross-compilation issues
-reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+reqwest = { version = "0.12", default-features = false, features = [
+  "json",
+  "rustls-tls",
+] }
 clap = { version = "4.0", features = ["derive"] }
 tokio = { version = "1", features = ["full"] }
 # Disable default features to avoid libz-ng-sys which has cross-compilation issues
