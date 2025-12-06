@@ -1,0 +1,12 @@
+node_modules
+*.node
+target
+.cargo-cache
+dist
+npm
+*.log
+
+# Source files (ship compiled versions only)
+bin.ts
+tsconfig.json
+

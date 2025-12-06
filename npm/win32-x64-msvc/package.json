@@ -1,0 +1,27 @@
+{
+  "name": "@owenizedd/bum-win32-x64-msvc",
+  "version": "0.6.1",
+  "os": [
+    "win32"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "main": "bum.win32-x64-msvc.node",
+  "files": [
+    "bum.win32-x64-msvc.node"
+  ],
+  "description": "Fast Bun version manager written in Rust",
+  "keywords": [
+    "bun",
+    "version-manager",
+    "rust",
+    "cli"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/owenizedd/bum.git"
+  }
+}
+

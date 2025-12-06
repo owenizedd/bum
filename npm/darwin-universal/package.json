@@ -1,0 +1,24 @@
+{
+  "name": "@owenizedd/bum-darwin-universal",
+  "version": "0.6.1",
+  "os": [
+    "darwin"
+  ],
+  "main": "bum.darwin-universal.node",
+  "files": [
+    "bum.darwin-universal.node"
+  ],
+  "description": "Fast Bun version manager written in Rust",
+  "keywords": [
+    "bun",
+    "version-manager",
+    "rust",
+    "cli"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/owenizedd/bum.git"
+  }
+}
+
