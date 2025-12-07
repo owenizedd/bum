@@ -12,6 +12,17 @@ use tokio::{
 const BUN_GITHUB_TAGS_URL: &str = "https://api.github.com/repos/oven-sh/bun/tags";
 pub const BUN_BIN_NAME: &str = "bun";
 
+fn get_bun_bin_name() -> &'static str {
+    #[cfg(target_os = "windows")]
+    {
+        "bun.exe"
+    }
+    #[cfg(not(target_os = "windows"))]
+    {
+        "bun"
+    }
+}
+
 pub async fn get_active_version() -> String {
     //get active version by running bun -v
     let output = Command::new("bun")
@@ -102,6 +113,8 @@ async fn extract_bun_bin_of_zip(zip_file_path: &Path, output_dir: &Path) -> Resu
 
     let mut archive = zip::ZipArchive::new(zip_file)?;
 
+    let bun_bin_name = get_bun_bin_name();
+
     for i in 0..archive.len() {
         let mut file_in_archive = archive.by_index(i).unwrap();
         let output_path = match file_in_archive.enclosed_name() {
@@ -109,13 +122,13 @@ async fn extract_bun_bin_of_zip(zip_file_path: &Path, output_dir: &Path) -> Resu
             None => continue,
         };
 
-        if !output_path.ends_with(BUN_BIN_NAME) {
+        if !output_path.ends_with(bun_bin_name) {
             continue;
         }
 
         create_dir_all(output_dir.clone()).await?;
 
-        let output_path = output_dir.join(BUN_BIN_NAME);
+        let output_path = output_dir.join(bun_bin_name);
         let mut output_file = std::fs::File::create(output_path.clone())?;
         std::io::copy(&mut file_in_archive, &mut output_file)?;
 
