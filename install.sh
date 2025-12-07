@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-
-VERSION="v0.7.8"
-
+VERSION="v0.7.10"
 if ! bun &>/dev/null; then
 	curl -fsSL https://bun.sh/install | bash
 fi
@@ -29,8 +27,6 @@ if [[ -t 1 ]]; then
     Bold_Green='\033[1;32m' # Bold Green
     Bold_White='\033[1m'    # Bold White
 fi
-
-
 error() {
     echo -e "${Red}error${Color_Off}:" "$@" >&2
     exit 1

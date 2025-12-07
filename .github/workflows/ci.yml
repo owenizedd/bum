@@ -324,6 +324,20 @@ jobs:
             echo "📁 $dir"
             ls -lh "$dir"*.node 2>/dev/null || echo "  ⚠️  No .node file"
           done
+      - name: Sync platform package versions
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "Syncing platform packages to version $VERSION"
+          for dir in npm/*/; do
+            # Update version in each platform package.json
+            node -e "
+              const fs = require('fs');
+              const pkg = JSON.parse(fs.readFileSync('$dir/package.json'));
+              pkg.version = '$VERSION';
+              fs.writeFileSync('$dir/package.json', JSON.stringify(pkg, null, 2) + '\n');
+            "
+            echo "✅ Updated $(basename $dir) to $VERSION"
+          done
       - name: Publish platform packages
         run: |
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
