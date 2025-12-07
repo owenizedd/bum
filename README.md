@@ -17,7 +17,7 @@ Introducing Bum, a fast Bun version manager written in Rust from scratch.
 
 ### Via npm/npx (Recommended)
 
-The easiest way to use Bum is via npm (this may not work as still in development phase):
+The easiest way to use Bum is via npm:
 
 ```bash
 # Use without installation
@@ -31,6 +31,7 @@ bum use 1.0.3
 ### Via Script (Unix)
 
 ## Unix
+If npm/npx doesn't work, you can fallback to Rust binary:
 
 1. Open your terminal and execute:
 
