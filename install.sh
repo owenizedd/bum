@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-VERSION="v0.7.7"
+VERSION="v0.7.8"
 
 if ! bun &>/dev/null; then
 	curl -fsSL https://bun.sh/install | bash
