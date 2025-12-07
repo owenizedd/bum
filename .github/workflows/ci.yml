@@ -357,6 +357,9 @@ jobs:
       - name: Test npm package locally
         run: |
           echo "Testing main package bin.js..."
+          # Copy bin.js and index.js to a platform folder and test there
+          cp bin.js index.js index.d.ts npm/linux-x64-gnu/
+          cd npm/linux-x64-gnu
           node bin.js --version || (echo "❌ bin.js failed" && exit 1)
           echo "✅ bin.js works correctly"
       - name: Publish
