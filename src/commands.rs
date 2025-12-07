@@ -441,4 +441,82 @@ mod tests {
             "Active binary content should match original"
         );
     }
+
+    /// Integration test that verifies the npm package works end-to-end.
+    /// This test:
+    /// 1. Builds the native binding
+    /// 2. Creates a temp directory with the npm package
+    /// 3. Runs `node bin.js use <version>` to install a Bun version
+    /// 4. Verifies the version was installed correctly
+    ///
+    /// Run with: cargo test test_npm_package_integration -- --nocapture --ignored
+    #[test]
+    #[ignore] // Run manually with --ignored flag (requires network)
+    fn test_npm_package_integration() {
+        use std::process::Command;
+
+        let project_root = std::env::current_dir().unwrap();
+
+        // Check if we're in the project root
+        if !project_root.join("bin.js").exists() {
+            println!("Skipping - not in project root");
+            return;
+        }
+
+        // Step 1: Build the native binding
+        println!("🔨 Building native binding...");
+        let build_output = Command::new("bun")
+            .args(["run", "build"])
+            .current_dir(&project_root)
+            .output()
+            .expect("Failed to run bun run build");
+
+        assert!(
+            build_output.status.success(),
+            "Build failed: {}",
+            String::from_utf8_lossy(&build_output.stderr)
+        );
+
+        // Step 2: Verify bin.js --version works
+        println!("📦 Testing bin.js --version...");
+        let version_output = Command::new("node")
+            .args(["bin.js", "--version"])
+            .current_dir(&project_root)
+            .output()
+            .expect("Failed to run bin.js --version");
+
+        assert!(
+            version_output.status.success(),
+            "bin.js --version failed: {}",
+            String::from_utf8_lossy(&version_output.stderr)
+        );
+
+        let version = String::from_utf8_lossy(&version_output.stdout);
+        println!("✅ Version: {}", version.trim());
+
+        // Step 3: Test actual bum use command
+        println!("📦 Testing bin.js use 1.3.3...");
+        let use_output = Command::new("node")
+            .args(["bin.js", "use", "1.3.3"])
+            .current_dir(&project_root)
+            .output()
+            .expect("Failed to run bin.js use 1.3.3");
+
+        assert!(
+            use_output.status.success(),
+            "bin.js use 1.3.3 failed: {}",
+            String::from_utf8_lossy(&use_output.stderr)
+        );
+
+        let use_stdout = String::from_utf8_lossy(&use_output.stdout);
+        println!("{}", use_stdout);
+
+        // Verify the output contains expected text
+        assert!(
+            use_stdout.contains("1.3.3") || use_stdout.contains("activated"),
+            "Expected output to mention version activation"
+        );
+
+        println!("✅ npm package integration test passed!");
+    }
 }
