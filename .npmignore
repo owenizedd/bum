@@ -5,8 +5,4 @@ target
 dist
 npm
 *.log
-
-# Source files (ship compiled versions only)
-bin.ts
-tsconfig.json
 .env

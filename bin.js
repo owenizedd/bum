@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
-// bin.ts
-var { run } = require("./index");
-var args = process.argv.slice(2);
+const { run } = require("./index");
+
+const args = process.argv.slice(2);
+
 try {
   run(args);
 } catch (e) {

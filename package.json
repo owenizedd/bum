@@ -1,6 +1,6 @@
 {
   "name": "@owenizedd/bum",
-  "version": "0.7.6",
+  "version": "0.7.7",
   "description": "Fast Bun version manager written in Rust",
   "main": "index.js",
   "types": "index.d.ts",
@@ -46,10 +46,8 @@
   },
   "scripts": {
     "artifacts": "napi artifacts",
-    "build": "npm run build:napi && npm run build:bin",
-    "build:napi": "napi build --platform --release",
-    "build:bin": "bun build bin.ts --outdir . --target node --format cjs --external ./index",
-    "build:debug": "napi build --platform && bun build bin.ts --outdir . --target node --format cjs",
+    "build": "napi build --platform --release",
+    "build:debug": "napi build --platform",
     "test": "echo \"No tests yet\"",
     "universal": "napi universal -d .",
     "version": "napi version"
@@ -59,13 +57,13 @@
     "@napi-rs/cli": "^2.18.4"
   },
   "optionalDependencies": {
-    "@owenizedd/bum-win32-x64-msvc": "0.7.6",
-    "@owenizedd/bum-darwin-x64": "0.7.6",
-    "@owenizedd/bum-linux-x64-gnu": "0.7.6",
-    "@owenizedd/bum-linux-x64-musl": "0.7.6",
-    "@owenizedd/bum-linux-arm64-gnu": "0.7.6",
-    "@owenizedd/bum-linux-arm64-musl": "0.7.6",
-    "@owenizedd/bum-darwin-arm64": "0.7.6",
-    "@owenizedd/bum-darwin-universal": "0.7.6"
+    "@owenizedd/bum-win32-x64-msvc": "0.7.7",
+    "@owenizedd/bum-darwin-x64": "0.7.7",
+    "@owenizedd/bum-linux-x64-gnu": "0.7.7",
+    "@owenizedd/bum-linux-x64-musl": "0.7.7",
+    "@owenizedd/bum-linux-arm64-gnu": "0.7.7",
+    "@owenizedd/bum-linux-arm64-musl": "0.7.7",
+    "@owenizedd/bum-darwin-arm64": "0.7.7",
+    "@owenizedd/bum-darwin-universal": "0.7.7"
   }
 }
