@@ -15,7 +15,7 @@ Introducing Bum, a fast Bun version manager written in Rust from scratch.
 
 ## How to install:
 
-### Via npm/npx (Recommended)
+### Via npm/npx (Easier)
 
 The easiest way to use Bum is via npm:
 
@@ -28,7 +28,7 @@ npm install -g @owenizedd/bum
 bum use 1.0.3
 ```
 
-### Via Script (Unix)
+### Via Script (Faster performance)
 
 If npm/npx doesn't work or you prefer native CLI experience, you can fallback to Rust binary:
 
