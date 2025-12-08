@@ -30,8 +30,7 @@ bum use 1.0.3
 
 ### Via Script (Unix)
 
-## Unix
-If npm/npx doesn't work, you can fallback to Rust binary:
+If npm/npx doesn't work or you prefer native CLI experience, you can fallback to Rust binary:
 
 1. Open your terminal and execute:
 
