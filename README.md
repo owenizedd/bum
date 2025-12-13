@@ -79,13 +79,13 @@ As Bum is not tested at all on Windows, it may not works. If it's the case pleas
 
 ## Contributing
 
-We welcome contributions! Please see our [Contributing Guide](./docs/CONTRIBUTING.md) for details on:
+We welcome contributions! Please see our [Contributing Guide](./technical-docs/CONTRIBUTING.md) for details on:
 - Development setup
 - Running tests
 - Code style guidelines
 - Pull request process
 
-For maintainers releasing new versions, see the [Release Guide](./docs/RELEASE.md).
+For maintainers releasing new versions, see the [Release Guide](./technical-docs/RELEASE.md).
 
 ## Questions or Issues?
 

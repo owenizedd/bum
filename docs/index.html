@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bum - The Fast Bun Version Manager</title>
+    <meta name="description" content="Bum is a fast, lightweight Bun version manager written in Rust.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="assets/logo.png">
+</head>
+<body>
+    <div class="background-glob"></div>
+    <div class="background-glob glob-2"></div>
+
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="#" class="brand">
+                <img src="assets/new-logo.jpg" alt="Bum Logo" class="logo-img">
+                <span>Bum</span>
+            </a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#install">Install</a>
+                <a href="#usage">Usage</a>
+                <a href="https://github.com/owenizedd/bum" target="_blank" class="github-link"><i class="fab fa-github"></i> GitHub</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container hero-content">
+            <div class="hero-text">
+                <div class="badge-container">
+                    <span class="badge rust"><i class="fab fa-rust"></i> Written in Rust</span>
+                    <span class="badge npm"><i class="fab fa-npm"></i> Available on NPM</span>
+                </div>
+                <h1 class="title">The <span class="gradient-text">Fastest</span> Way to Manage Bun Versions</h1>
+                <p class="subtitle">Lightweight, blazing fast, and built for developer happiness. Switch Bun versions instantly.</p>
+                <div class="cta-group">
+                    <a href="#install" class="btn btn-primary">Get Started <i class="fas fa-arrow-down"></i></a>
+                    <div class="copy-command-wrapper" onclick="copyToClipboard('npm install -g @owenizedd/bum')">
+                        <span class="command-text">$ npm i -g @owenizedd/bum</span>
+                        <i class="far fa-copy"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="glass-card visual-card">
+                    <div class="window-controls">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                    </div>
+                    <img src="assets/bum-quick-demo.gif" alt="Bum Demo" class="demo-gif">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="features" class="features">
+        <div class="container">
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="icon-box"><i class="fas fa-bolt"></i></div>
+                    <h3>Blazing Fast</h3>
+                    <p>Written in Rust from scratch for maximum performance and minimal overhead.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon-box"><i class="fas fa-feather"></i></div>
+                    <h3>Lightweight</h3>
+                    <p>Tiny footprint. No heavy dependencies. Just a single binary doing its job.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon-box"><i class="fas fa-laptop-code"></i></div>
+                    <h3>Developer First</h3>
+                    <p>Simple CLI commands that make sense. <code>bum use</code> and you're good to go.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="install" class="install-section">
+        <div class="container">
+            <h2 class="section-title">Installation</h2>
+            <div class="install-tabs">
+                <button class="tab-btn active" onclick="switchTab('npm')">NPM / NPX (Easiest way)</button>
+                <button class="tab-btn" onclick="switchTab('shell')">Shell Script (Native Rust Binary)</button>
+            </div>
+            
+            <div class="code-block-container active" id="tab-npm">
+                <div class="code-header">
+                    <span>Terminal</span>
+                    <button class="copy-btn" onclick="copyCode('npm-code')"><i class="far fa-copy"></i> Copy</button>
+                </div>
+                <pre><code id="npm-code"># Install globally
+npm install -g @owenizedd/bum
+
+# Or use via npx
+npx @owenizedd/bum use 1.0.3</code></pre>
+            </div>
+
+            <div class="code-block-container" id="tab-shell">
+                <div class="code-header">
+                    <span>Terminal</span>
+                    <button class="copy-btn" onclick="copyCode('shell-code')"><i class="far fa-copy"></i> Copy</button>
+                </div>
+                <pre><code id="shell-code"># Native Shell Installation
+curl -fsSL https://github.com/owenizedd/bum/raw/main/install.sh | bash</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section id="usage" class="usage-section">
+        <div class="container">
+            <h2 class="section-title">Usage</h2>
+            <div class="usage-grid">
+                <div class="command-card">
+                    <code>bum use &lt;version&gt;</code>
+                    <p>Switch to a specific version. Installs if missing.</p>
+                </div>
+                <div class="command-card">
+                    <code>bum list</code>
+                    <p>List all locally installed Bun versions.</p>
+                </div>
+                <div class="command-card">
+                    <code>bum list-remote</code>
+                    <p>List all available Bun versions for download.</p>
+                </div>
+                <div class="command-card">
+                    <code>bum remove &lt;version&gt;</code>
+                    <p>Remove a specific version from local storage.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <p>&copy; 2024 Owenizedd. Released under MIT License.</p>
+            <div class="socials">
+                <a href="https://github.com/owenizedd/bum"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
