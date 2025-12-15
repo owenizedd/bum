@@ -40,16 +40,6 @@ curl -fsSL https://github.com/owenizedd/bum/raw/main/install.sh | bash
 
 > This installation will install bun for you and also bum altogether.
 
-## Windows
-
-I only own a Mac, so I can't test at all if Windows is working, and I can't write a script to auto-install on Windows as well. So here are a few instructions on how to install Bum for Windows:
-
-1. Install [Bun](https://bun.sh/)
-2. Download the last exe in the [latest release](https://github.com/owenizedd/bum/releases/latest), and unzip it
-3. Put the exe in your favorite directory, add the path to this directory in your PATH, and that's it!
-
-As Bum is not tested at all on Windows, it may not works. If it's the case please open an issue and I'll be glad to fix it.
-
 ## How to use:
 
 - You can just run `bum` without any parameter to see default help menu.
