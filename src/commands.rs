@@ -64,7 +64,7 @@ pub async fn use_bun(version: &str) -> Result<()> {
     println!("Bum - installing bun for version {}...", version);
 
     if fs::metadata(FOLDER_VERSION_BASE.to_owned()).await.is_err() {
-        let _ = fs::create_dir_all(FOLDER_VERSION_BASE.to_owned());
+        fs::create_dir_all(FOLDER_VERSION_BASE.to_owned()).await?;
     }
 
     let zip_file_path = FOLDER_VERSION_BASE.join(format!("{}.zip", version));
@@ -120,6 +120,10 @@ pub async fn remove(version: &str) {
 
 pub async fn list() -> Result<()> {
     let mut versions_list: Vec<String> = Vec::new();
+
+    if fs::metadata(FOLDER_VERSION_BASE.to_owned()).await.is_err() {
+        return Ok(());
+    }
 
     match fs::read_dir(FOLDER_VERSION_BASE.to_owned()).await {
         Ok(mut entries) => {
