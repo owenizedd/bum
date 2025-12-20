@@ -49,7 +49,7 @@ jobs:
       fail-fast: false
       matrix:
         settings:
-          - host: macos-13
+          - host: macos-14
             target: x86_64-apple-darwin
             build: |
               bun run build --target x86_64-apple-darwin
