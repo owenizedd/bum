@@ -1,6 +1,6 @@
 {
   "name": "@owenizedd/bum-linux-arm64-musl",
-  "version": "0.7.12",
+  "version": "0.7.13",
   "os": [
     "linux"
   ],
