@@ -22,6 +22,12 @@
     "url": "https://github.com/owenizedd/bum/issues"
   },
   "homepage": "https://github.com/owenizedd/bum#readme",
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "bin.js",
+    "npm/"
+  ],
   "napi": {
     "name": "bum",
     "triples": {
