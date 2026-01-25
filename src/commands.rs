@@ -64,7 +64,10 @@ pub async fn use_bun(version: &str) -> Result<()> {
     println!("Bum - installing bun for version {}...", version);
 
     if fs::metadata(FOLDER_VERSION_BASE.to_owned()).await.is_err() {
-        fs::create_dir_all(FOLDER_VERSION_BASE.to_owned()).await?;
+        if let Err(e) = fs::create_dir_all(FOLDER_VERSION_BASE.to_owned()).await {
+             eprintln!("Failed to create directory {:?}: {}", FOLDER_VERSION_BASE.to_owned(), e);
+             return Err(e.into());
+        }
     }
 
     let zip_file_path = FOLDER_VERSION_BASE.join(format!("{}.zip", version));
@@ -99,6 +102,7 @@ pub async fn activate_bun(bun_used_path: PathBuf) -> Result<()> {
 
     Ok(())
 }
+
 
 pub async fn remove(version: &str) {
     let version = normalize_version(version);
@@ -520,6 +524,7 @@ mod tests {
             use_stdout.contains("1.3.3") || use_stdout.contains("activated"),
             "Expected output to mention version activation"
         );
+
 
         println!("✅ npm package integration test passed!");
     }
