@@ -75,6 +75,12 @@ pub async fn download_version_to(version: &str, to_path: &Path) -> Result<PathBu
 
     match response.status() {
         StatusCode::OK => {
+            if let Some(parent) = to_path.parent() {
+                if !parent.exists() {
+                    create_dir_all(parent).await?;
+                }
+            }
+
             let file = File::create(to_path).await?;
             let mut writer = BufWriter::new(file);
 

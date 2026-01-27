@@ -1,6 +1,6 @@
 {
   "name": "@owenizedd/bum",
-  "version": "0.7.13",
+  "version": "0.7.14",
   "description": "Fast Bun version manager written in Rust",
   "main": "index.js",
   "types": "index.d.ts",
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/owenizedd/bum#readme",
   "napi": {
-    "name": "bum",
+    "name": "bum_napi",
     "triples": {
       "defaults": true,
       "additional": [
@@ -45,9 +45,9 @@
     "access": "public"
   },
   "scripts": {
-    "artifacts": "napi artifacts",
-    "build": "napi build --platform --release",
-    "build:debug": "napi build --platform",
+    "artifacts": "napi artifacts --cargo-name bum_napi",
+    "build": "napi build --platform --release --cargo-name bum_napi",
+    "build:debug": "napi build --platform --cargo-name bum_napi",
     "test": "echo \"No tests yet\"",
     "universal": "napi universal -d .",
     "version": "napi version"
@@ -57,13 +57,13 @@
     "@napi-rs/cli": "^2.18.4"
   },
   "optionalDependencies": {
-    "@owenizedd/bum-win32-x64-msvc": "0.7.13",
-    "@owenizedd/bum-darwin-x64": "0.7.13",
-    "@owenizedd/bum-linux-x64-gnu": "0.7.13",
-    "@owenizedd/bum-linux-x64-musl": "0.7.13",
-    "@owenizedd/bum-linux-arm64-gnu": "0.7.13",
-    "@owenizedd/bum-linux-arm64-musl": "0.7.13",
-    "@owenizedd/bum-darwin-arm64": "0.7.13",
-    "@owenizedd/bum-darwin-universal": "0.7.13"
+    "@owenizedd/bum-win32-x64-msvc": "0.7.14",
+    "@owenizedd/bum-darwin-x64": "0.7.14",
+    "@owenizedd/bum-linux-x64-gnu": "0.7.14",
+    "@owenizedd/bum-linux-x64-musl": "0.7.14",
+    "@owenizedd/bum-linux-arm64-gnu": "0.7.14",
+    "@owenizedd/bum-linux-arm64-musl": "0.7.14",
+    "@owenizedd/bum-darwin-arm64": "0.7.14",
+    "@owenizedd/bum-darwin-universal": "0.7.14"
   }
 }
