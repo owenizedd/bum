@@ -4,6 +4,7 @@ version = "0.7.14"
 edition = "2021"
 
 [lib]
+name = "bum_napi"
 crate-type = ["cdylib", "rlib"]
 
 [[bin]]

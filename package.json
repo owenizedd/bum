@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/owenizedd/bum#readme",
   "napi": {
-    "name": "bum",
+    "name": "bum_napi",
     "triples": {
       "defaults": true,
       "additional": [
@@ -45,9 +45,9 @@
     "access": "public"
   },
   "scripts": {
-    "artifacts": "napi artifacts",
-    "build": "napi build --platform --release",
-    "build:debug": "napi build --platform",
+    "artifacts": "napi artifacts --cargo-name bum_napi",
+    "build": "napi build --platform --release --cargo-name bum_napi",
+    "build:debug": "napi build --platform --cargo-name bum_napi",
     "test": "echo \"No tests yet\"",
     "universal": "napi universal -d .",
     "version": "napi version"
