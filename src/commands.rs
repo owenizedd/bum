@@ -84,16 +84,26 @@ pub async fn use_bun(version: &str) -> Result<()> {
 }
 
 pub async fn activate_bun(bun_used_path: PathBuf) -> Result<()> {
-    fs::copy(bun_used_path, BUN_BIN_PATH.to_owned()).await?;
+    activate_bun_to(bun_used_path, BUN_BIN_PATH.to_path_buf()).await
+}
 
-    let metadata = fs::metadata(BUN_BIN_PATH.to_owned()).await?;
+async fn activate_bun_to(bun_used_path: PathBuf, target_path: PathBuf) -> Result<()> {
+    if let Some(parent) = target_path.parent() {
+        if fs::metadata(parent).await.is_err() {
+            fs::create_dir_all(parent).await?;
+        }
+    }
+
+    fs::copy(bun_used_path, &target_path).await?;
+
+    let metadata = fs::metadata(&target_path).await?;
 
     let mut permissions = metadata.permissions();
 
     #[cfg(not(windows))]
     permissions.set_mode(permissions.mode() | 0o111); // Add execute permission
 
-    fs::set_permissions(BUN_BIN_PATH.to_owned(), permissions)
+    fs::set_permissions(&target_path, permissions)
         .await
         .unwrap();
 
@@ -308,6 +318,46 @@ mod tests {
             active_content,
             format!("mock bun {}", version),
             "Active binary should match source"
+        );
+    }
+
+    #[tokio::test]
+    async fn test_activate_bun_creates_missing_bin_directory() {
+        let temp_dir = TempDir::new().unwrap();
+        let versions_dir = temp_dir.path().join(".bum").join("bun-versions");
+        let bin_dir = temp_dir.path().join(".bun").join("bin");
+
+        fs::create_dir_all(&versions_dir).unwrap();
+
+        // Create a mock bun binary in version dir
+        let version = "1.0.0";
+        let version_dir = versions_dir.join(version);
+        fs::create_dir_all(&version_dir).unwrap();
+        let bun_source = version_dir.join(BUN_BIN_NAME);
+        fs::write(&bun_source, format!("mock bun {}", version)).unwrap();
+
+        #[cfg(not(windows))]
+        {
+            use std::os::unix::fs::PermissionsExt;
+            let mut perms = fs::metadata(&bun_source).unwrap().permissions();
+            perms.set_mode(0o755);
+            fs::set_permissions(&bun_source, perms).unwrap();
+        }
+
+        // Ensure bin_dir does not exist before activation
+        assert!(!bin_dir.exists(), "Bin directory should not exist yet");
+
+        let target = bin_dir.join(BUN_BIN_NAME);
+        activate_bun_to(bun_source, target.clone()).await.unwrap();
+
+        assert!(bin_dir.exists(), "Bin directory should be created");
+        assert!(target.exists(), "Active binary should exist");
+
+        let content = fs::read_to_string(&target).unwrap();
+        assert_eq!(
+            content,
+            format!("mock bun {}", version),
+            "Active binary content should match source"
         );
     }
 

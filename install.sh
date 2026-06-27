@@ -163,6 +163,7 @@ refresh_command=''
 
 tilde_bin_dir="$bin_dir"
 quoted_install_dir=\"${install_dir//\"/\\\"}\"
+bun_bin_dir="$HOME/.bun/bin"
 
 if [[ $quoted_install_dir = \"$HOME/* ]]; then
 	quoted_install_dir=${quoted_install_dir/$HOME\//\$HOME/}
@@ -175,6 +176,7 @@ fish)
 	commands=(
 		"set --export $install_env $quoted_install_dir"
 		"set --export PATH $bin_env \$PATH"
+		"set --export PATH $bun_bin_dir \$PATH"
 	)
 
 	fish_config=$HOME/.config/fish/config.fish
@@ -197,6 +199,7 @@ zsh)
 	commands=(
 		"export $install_env=$quoted_install_dir"
 		"export PATH=\"$bin_env:\$PATH\""
+		"export PATH=\"$bun_bin_dir:\$PATH\""
 	)
 
 	zsh_config=$HOME/.zshrc
@@ -219,6 +222,7 @@ bash)
 	commands=(
 		"export $install_env=$quoted_install_dir"
 		"export PATH=$bin_env:\$PATH"
+		"export PATH=$bun_bin_dir:\$PATH"
 	)
 
 	bash_configs=(
@@ -260,5 +264,6 @@ bash)
 	echo 'Manually add the directory to ~/.bashrc (or similar):'
 	info_bold "  export $install_env=$quoted_install_dir"
 	info_bold "  export PATH=\"$bin_env:\$PATH\""
+	info_bold "  export PATH=\"$bun_bin_dir:\$PATH\""
 	;;
 esac

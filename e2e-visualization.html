@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>bum E2E Test Flow Visualization</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    h1 { margin-bottom: 0.5rem; color: #f6e0b5; }
+    p.subtitle { color: #94a3b8; margin-top: 0; margin-bottom: 1.5rem; }
+    #canvas {
+      background: #1e293b;
+      border-radius: 12px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+      max-width: 100%;
+    }
+    .controls {
+      margin-top: 1rem;
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    button {
+      background: #eea990;
+      color: #1e293b;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover { background: #f6e0b5; }
+    button.secondary {
+      background: #334155;
+      color: #e2e8f0;
+    }
+    button.secondary:hover { background: #475569; }
+    .legend {
+      margin-top: 1.5rem;
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+    .legend-item { display: flex; align-items: center; gap: 0.5rem; }
+    .dot { width: 14px; height: 14px; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <h1>bum E2E Test Flow</h1>
+  <p class="subtitle">Isolated <code>$HOME</code> — no contamination of the host's real <code>~/.bun/bin</code></p>
+
+  <canvas id="canvas" width="900" height="700"></canvas>
+
+  <div class="controls">
+    <button id="playBtn">▶ Play</button>
+    <button id="pauseBtn" class="secondary">⏸ Pause</button>
+    <button id="resetBtn" class="secondary">↺ Reset</button>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="dot" style="background:#f6e0b5"></div>Host environment</div>
+    <div class="legend-item"><div class="dot" style="background:#aa6f73"></div>Build step</div>
+    <div class="legend-item"><div class="dot" style="background:#eea990"></div>Isolated test steps</div>
+    <div class="legend-item"><div class="dot" style="background:#38bdf8"></div>Verification</div>
+    <div class="legend-item"><div class="dot" style="background:#4ade80"></div>Cleanup</div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let animationId;
+    let running = false;
+    let progress = 0;
+    const speed = 0.003;
+
+    const colors = {
+      host: '#f6e0b5',
+      build: '#aa6f73',
+      step: '#eea990',
+      verify: '#38bdf8',
+      cleanup: '#4ade80',
+      text: '#e2e8f0',
+      dim: '#64748b',
+      line: '#475569',
+      bg: '#1e293b'
+    };
+
+    const nodes = [
+      { id: 'host', label: 'Host environment', sub: 'bun, cargo, node on PATH', x: 120, y: 80, w: 220, h: 70, color: colors.host },
+      { id: 'build', label: '1. bun run build', sub: 'Compiles native .node binding', x: 120, y: 200, w: 220, h: 70, color: colors.build },
+      { id: 'isolated', label: '2. Isolated $HOME', sub: '/tmp/tmp.XXXXXX', x: 120, y: 320, w: 220, h: 70, color: colors.step },
+      { id: 'version', label: '3. node bin.js --version', sub: 'Prints 0.7.13', x: 120, y: 440, w: 260, h: 70, color: colors.step },
+      { id: 'use', label: '4. node bin.js use 1.3.3', sub: 'Download → extract → create ~/.bun/bin → copy bun', x: 450, y: 440, w: 360, h: 90, color: colors.step },
+      { id: 'verify', label: '5. ~/.bun/bin/bun --version', sub: 'Prints 1.3.3', x: 450, y: 580, w: 260, h: 70, color: colors.verify },
+      { id: 'list', label: '6. node bin.js list', sub: 'Shows 1.3.3 (active)', x: 120, y: 580, w: 220, h: 70, color: colors.verify },
+      { id: 'cleanup', label: '7. rm -rf /tmp/tmp.XXXXXX', sub: 'Isolated home destroyed', x: 450, y: 320, w: 260, h: 70, color: colors.cleanup },
+    ];
+
+    const edges = [
+      { from: 'host', to: 'build' },
+      { from: 'build', to: 'isolated' },
+      { from: 'isolated', to: 'version' },
+      { from: 'version', to: 'use' },
+      { from: 'use', to: 'verify' },
+      { from: 'use', to: 'list' },
+      { from: 'verify', to: 'cleanup' },
+      { from: 'list', to: 'cleanup' },
+    ];
+
+    function drawRoundedRect(x, y, w, h, r, color, active) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+      ctx.fillStyle = active ? color : '#334155';
+      ctx.fill();
+      ctx.lineWidth = active ? 3 : 1;
+      ctx.strokeStyle = active ? '#ffffff' : colors.line;
+      ctx.stroke();
+    }
+
+    function drawArrow(x1, y1, x2, y2, active) {
+      const head = 10;
+      const dx = x2 - x1;
+      const dy = y2 - y1;
+      const angle = Math.atan2(dy, dx);
+      const len = Math.sqrt(dx * dx + dy * dy);
+      const endX = x2 - Math.cos(angle) * 15;
+      const endY = y2 - Math.sin(angle) * 15;
+      const startX = x1 + Math.cos(angle) * 15;
+      const startY = y1 + Math.sin(angle) * 15;
+
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.lineTo(endX, endY);
+      ctx.lineWidth = active ? 3 : 1.5;
+      ctx.strokeStyle = active ? '#ffffff' : colors.line;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(endX, endY);
+      ctx.lineTo(endX - head * Math.cos(angle - Math.PI / 6), endY - head * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(endX - head * Math.cos(angle + Math.PI / 6), endY - head * Math.sin(angle + Math.PI / 6));
+      ctx.closePath();
+      ctx.fillStyle = active ? '#ffffff' : colors.line;
+      ctx.fill();
+
+      if (active) {
+        const t = (Date.now() % 1000) / 1000;
+        const px = startX + (endX - startX) * t;
+        const py = startY + (endY - startY) * t;
+        ctx.beginPath();
+        ctx.arc(px, py, 5, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.fill();
+      }
+    }
+
+    function getCenter(node) {
+      return { x: node.x + node.w / 2, y: node.y + node.h / 2 };
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw title on canvas
+      ctx.font = 'bold 18px sans-serif';
+      ctx.fillStyle = colors.text;
+      ctx.textAlign = 'left';
+      ctx.fillText('Flow overview', 30, 35);
+
+      // Draw edges
+      edges.forEach((edge, i) => {
+        const fromNode = nodes.find(n => n.id === edge.from);
+        const toNode = nodes.find(n => n.id === edge.to);
+        const c1 = getCenter(fromNode);
+        const c2 = getCenter(toNode);
+        const active = running && progress > i / edges.length && progress <= (i + 1) / edges.length;
+        drawArrow(c1.x, c1.y, c2.x, c2.y, active);
+      });
+
+      // Draw nodes
+      nodes.forEach((node, i) => {
+        const nodeProgress = i / nodes.length;
+        const active = progress >= nodeProgress;
+        drawRoundedRect(node.x, node.y, node.w, node.h, 10, node.color, active);
+
+        ctx.fillStyle = active ? '#1e293b' : '#94a3b8';
+        ctx.font = 'bold 14px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(node.label, node.x + node.w / 2, node.y + 28);
+
+        ctx.fillStyle = active ? '#334155' : '#64748b';
+        ctx.font = '12px sans-serif';
+        const lines = node.sub.split(' → ');
+        if (lines.length > 1) {
+          lines.forEach((line, idx) => {
+            ctx.fillText(line, node.x + node.w / 2, node.y + 50 + idx * 15);
+          });
+        } else {
+          ctx.fillText(node.sub, node.x + node.w / 2, node.y + 50);
+        }
+      });
+
+      // Isolation boundary box
+      ctx.strokeStyle = 'rgba(238, 169, 144, 0.4)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([8, 6]);
+      ctx.strokeRect(80, 290, 760, 390);
+      ctx.setLineDash([]);
+      ctx.fillStyle = 'rgba(238, 169, 144, 0.15)';
+      ctx.fillRect(80, 290, 760, 390);
+      ctx.fillStyle = '#eea990';
+      ctx.font = 'bold 13px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText('Isolation boundary — only /tmp/tmp.XXXXXX is modified', 95, 315);
+
+      // Host untouched note
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '12px sans-serif';
+      ctx.fillText('Host ~/.bun/bin and ~/.bum/bun-versions are NOT touched', 95, 160);
+    }
+
+    function animate() {
+      if (!running) return;
+      progress += speed;
+      if (progress >= 1.2) progress = 0;
+      draw();
+      animationId = requestAnimationFrame(animate);
+    }
+
+    document.getElementById('playBtn').addEventListener('click', () => {
+      if (!running) {
+        running = true;
+        animate();
+      }
+    });
+
+    document.getElementById('pauseBtn').addEventListener('click', () => {
+      running = false;
+      cancelAnimationFrame(animationId);
+      draw();
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      running = false;
+      cancelAnimationFrame(animationId);
+      progress = 0;
+      draw();
+    });
+
+    draw();
+  </script>
+</body>
+</html>

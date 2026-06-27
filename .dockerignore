@@ -1,0 +1,7 @@
+/target
+node_modules
+*.node
+.cargo-cache
+dist
+.env
+.git
