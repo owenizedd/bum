@@ -342,13 +342,12 @@ jobs:
         run: |
           set -o pipefail
           echo "@owenizedd:registry=https://registry.npmjs.org" > ~/.npmrc
-          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
           for dir in npm/*/; do
             platform=$(basename "$dir")
             if [ -f "$dir"/*.node ]; then
               echo "📦 Publishing @owenizedd/bum-$platform..."
               cd "$dir"
-              if npm publish --access public --provenance 2>&1 | tee publish.log; then
+              if npm publish --access public --provenance --registry https://registry.npmjs.org 2>&1 | tee publish.log; then
                 echo "✅ Published @owenizedd/bum-$platform"
               else
                 if grep -q "cannot publish over the previously published\|You cannot publish over previously published versions" publish.log; then
@@ -364,8 +363,6 @@ jobs:
               echo "⚠️  Skipping $platform (no .node file)"
             fi
           done
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: List packages
         run: ls -R ./npm
         shell: bash
@@ -383,8 +380,7 @@ jobs:
           then
             set -o pipefail
             echo "@owenizedd:registry=https://registry.npmjs.org" > ~/.npmrc
-            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            if npm publish --access public --provenance 2>&1 | tee publish.log; then
+            if npm publish --access public --provenance --registry https://registry.npmjs.org 2>&1 | tee publish.log; then
               echo "✅ Published successfully"
             else
               if grep -q "cannot publish over the previously published" publish.log || grep -q "You cannot publish over previously published versions" publish.log; then
@@ -401,4 +397,3 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
