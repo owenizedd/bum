@@ -1,6 +1,6 @@
 {
   "name": "@owenizedd/bum-win32-x64-msvc",
-  "version": "0.7.15",
+  "version": "0.7.16",
   "os": [
     "win32"
   ],
