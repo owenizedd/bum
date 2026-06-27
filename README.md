@@ -3,11 +3,36 @@
 <img src=".docs/new-logo.jpg" height="auto" width="150" style="border-radius:50%">
 <br/>
 
-<div style="display: flex; gap: 1; align-items: center;">
-<a href="https://github.com/owenizedd/bum/actions/workflows/deploy.yml"><img alt="GitHub CI Status" src="https://img.shields.io/github/actions/workflow/status/owenizedd/bum/deploy.yml?label=CI&logo=GitHub"></a> 
+<!-- npm -->
+<a href="https://www.npmjs.com/package/@owenizedd/bum"><img src="https://img.shields.io/npm/v/@owenizedd/bum?logo=npm&label=version" alt="npm version"></a>
+<a href="https://www.npmjs.com/package/@owenizedd/bum"><img src="https://img.shields.io/npm/dm/@owenizedd/bum?logo=npm&label=downloads" alt="npm downloads"></a>
+<a href="https://www.npmjs.com/package/@owenizedd/bum"><img src="https://img.shields.io/npm/dt/@owenizedd/bum?logo=npm&label=total" alt="npm total downloads"></a>
+<a href="https://docs.npmjs.com/generating-provenance-statements"><img src="https://img.shields.io/badge/provenance-signed-brightgreen?logo=npm" alt="npm provenance"></a>
+<a href="https://www.npmjs.com/package/@owenizedd/bum"><img src="https://img.shields.io/npm/l/@owenizedd/bum" alt="npm license"></a>
+<a href="https://www.npmjs.com/package/@owenizedd/bum"><img src="https://img.shields.io/npm/unpacked-size/@owenizedd/bum?label=size" alt="npm size"></a>
 
-<img src="https://img.shields.io/badge/Made%20with-Rust-orange?style=for-the-badge&logo=Rust" height="20px">
-</div>
+<!-- GitHub -->
+<a href="https://github.com/owenizedd/bum/actions/workflows/deploy.yml"><img src="https://img.shields.io/github/actions/workflow/status/owenizedd/bum/deploy.yml?logo=github&label=CI" alt="GitHub CI"></a>
+<a href="https://github.com/owenizedd/bum/releases"><img src="https://img.shields.io/github/v/release/owenizedd/bum?logo=github&label=release" alt="GitHub release"></a>
+<a href="https://github.com/owenizedd/bum/commits/main"><img src="https://img.shields.io/github/last-commit/owenizedd/bum?logo=github&label=last%20commit" alt="GitHub last commit"></a>
+<a href="https://github.com/owenizedd/bum/graphs/commit-activity"><img src="https://img.shields.io/github/commit-activity/m/owenizedd/bum?logo=github&label=commits" alt="GitHub commit activity"></a>
+<a href="https://github.com/owenizedd/bum/issues"><img src="https://img.shields.io/github/issues/owenizedd/bum?logo=github&label=issues" alt="GitHub issues"></a>
+<a href="https://github.com/owenizedd/bum/pulls"><img src="https://img.shields.io/github/issues-pr/owenizedd/bum?logo=github&label=PRs" alt="GitHub pull requests"></a>
+<a href="https://github.com/owenizedd/bum/stargazers"><img src="https://img.shields.io/github/stars/owenizedd/bum?logo=github&label=stars" alt="GitHub stars"></a>
+<a href="https://github.com/owenizedd/bum/forks"><img src="https://img.shields.io/github/forks/owenizedd/bum?logo=github&label=forks" alt="GitHub forks"></a>
+<a href="https://github.com/owenizedd/bum/blob/main/LICENSE"><img src="https://img.shields.io/github/license/owenizedd/bum" alt="GitHub license"></a>
+<a href="https://github.com/owenizedd/bum"><img src="https://img.shields.io/github/languages/code-size/owenizedd/bum?label=code%20size" alt="GitHub code size"></a>
+<a href="https://github.com/owenizedd/bum"><img src="https://img.shields.io/github/languages/top/owenizedd/bum?logo=rust&label=Rust" alt="GitHub top language"></a>
+<a href="https://github.com/owenizedd/bum"><img src="https://img.shields.io/github/repo-size/owenizedd/bum?label=repo%20size" alt="GitHub repo size"></a>
+
+<!-- Rust -->
+<a href="https://www.rust-lang.org/"><img src="https://img.shields.io/badge/Made%20with-Rust-orange?logo=Rust" alt="Made with Rust"></a>
+<a href="https://github.com/owenizedd/bum/blob/main/Cargo.toml"><img src="https://img.shields.io/badge/rustc-1.85%2B-orange?logo=Rust" alt="Rust version"></a>
+
+<!-- Meta -->
+<a href="https://semver.org/"><img src="https://img.shields.io/badge/semver-2.0.0-blue" alt="SemVer"></a>
+<a href="https://github.com/owenizedd/bum/blob/main/CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen" alt="PRs welcome"></a>
+<a href="https://github.com/owenizedd/bum/issues"><img src="https://img.shields.io/badge/maintenance-active-green" alt="Maintenance"></a>
 <br/>
 Introducing Bum, a fast Bun version manager written in Rust from scratch.
 
