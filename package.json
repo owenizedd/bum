@@ -1,6 +1,6 @@
 {
   "name": "@owenizedd/bum",
-  "version": "0.7.20",
+  "version": "0.7.21",
   "description": "Fast Bun version manager written in Rust",
   "main": "index.js",
   "types": "index.d.ts",
@@ -58,13 +58,13 @@
     "@napi-rs/cli": "^2.18.4"
   },
   "optionalDependencies": {
-    "@owenizedd/bum-darwin-arm64": "0.7.20",
-    "@owenizedd/bum-darwin-universal": "0.7.20",
-    "@owenizedd/bum-darwin-x64": "0.7.20",
-    "@owenizedd/bum-linux-arm64-gnu": "0.7.20",
-    "@owenizedd/bum-linux-arm64-musl": "0.7.20",
-    "@owenizedd/bum-linux-x64-gnu": "0.7.20",
-    "@owenizedd/bum-linux-x64-musl": "0.7.20",
-    "@owenizedd/bum-win32-x64-msvc": "0.7.20"
+    "@owenizedd/bum-darwin-arm64": "0.7.21",
+    "@owenizedd/bum-darwin-universal": "0.7.21",
+    "@owenizedd/bum-darwin-x64": "0.7.21",
+    "@owenizedd/bum-linux-arm64-gnu": "0.7.21",
+    "@owenizedd/bum-linux-arm64-musl": "0.7.21",
+    "@owenizedd/bum-linux-x64-gnu": "0.7.21",
+    "@owenizedd/bum-linux-x64-musl": "0.7.21",
+    "@owenizedd/bum-win32-x64-msvc": "0.7.21"
   }
 }
