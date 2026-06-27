@@ -125,10 +125,11 @@ async fn activate_bun_to(bun_used_path: PathBuf, target_path: PathBuf) -> Result
 
     if !is_bun_bin_in_path() {
         if let Some(parent) = target_path.parent() {
+            eprintln!("Note: {} is not in your PATH.", parent.display());
             eprintln!(
-                "Hint: add {} to your PATH to use bun directly.",
-                parent.display()
+                "      To use bun directly, add this to your shell config (~/.bashrc, ~/.zshrc, etc.):"
             );
+            eprintln!("        export PATH=\"{}:$PATH\"", parent.display());
         }
     }
 
