@@ -19,10 +19,7 @@ Introducing Bum, a fast Bun version manager written in Rust from scratch.
 
 The easiest way to use Bum is via npm.
 
-> **Note:** When installing via npm, `~/.bun/bin` is not automatically added to your PATH. Add the following to your shell config (`~/.bashrc`, `~/.zshrc`, etc.) **before** installing so you can run `bun` directly after activation:
-> ```bash
-> export PATH="$HOME/.bun/bin:$PATH"
-> ```
+> **Note:** When installing via npm, `~/.bun/bin` is not automatically added to your PATH. Add this line to your shell config (`~/.bashrc`, `~/.zshrc`, etc.) **before** installing so you can run `bun` directly after activation: `export PATH="$HOME/.bun/bin:$PATH"`
 
 ```bash
 # Use without installation
