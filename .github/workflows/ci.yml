@@ -340,8 +340,8 @@ jobs:
           done
       - name: Publish platform packages
         run: |
-          echo "registry=https://registry.npmjs.org" >> ~/.npmrc
-
+          set -o pipefail
+          echo "@owenizedd:registry=https://registry.npmjs.org" > ~/.npmrc
           for dir in npm/*/; do
             platform=$(basename "$dir")
             if [ -f "$dir"/*.node ]; then
@@ -378,8 +378,8 @@ jobs:
         run: |
           if git describe --exact-match --tags HEAD 2>/dev/null | grep "^v[0-9]\+\.[0-9]\+\.[0-9]\+$";
           then
-            echo "registry=https://registry.npmjs.org" >> ~/.npmrc
-
+            set -o pipefail
+            echo "@owenizedd:registry=https://registry.npmjs.org" > ~/.npmrc
             if npm publish --access public --provenance 2>&1 | tee publish.log; then
               echo "✅ Published successfully"
             else
