@@ -9,7 +9,7 @@
 # from a tarball, and `bum use 1.3.3` is run in an isolated $HOME.
 set -euo pipefail
 
-PROJECT_ROOT="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 ENGINE="${DOCKER:-podman}"
 TAG="bum-npm-install-e2e"
 

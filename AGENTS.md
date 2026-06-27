@@ -50,14 +50,14 @@ cargo clippy
 cargo fmt --check
 
 # npm package integration test (network required — downloads Bun from GitHub)
-bash test-npm.sh
+bash e2e/test-npm.sh
 
 # E2E test that verifies fresh-install behavior (missing ~/.bun/bin)
-bash e2e-test.sh
+bash e2e/test.sh
 
 # E2E test that simulates `npm install -g @owenizedd/bum` on a system
 # without Bun pre-installed
-bash e2e-test-npm-install.sh
+bash e2e/test-npm-install.sh
 ```
 
 **Note:** `bun run build` shells out to `cargo metadata governmental --format-version 1`, so `cargo` must be available. In environments where Rust was installed via rustup, source `$HOME/.cargo/env` first.

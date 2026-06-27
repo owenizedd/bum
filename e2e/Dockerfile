@@ -1,5 +1,5 @@
 # Containerized E2E test for bum.
-# Builds the project in a clean environment and runs e2e-test.sh.
+# Builds the project in a clean environment and runs e2e/test.sh.
 FROM node:22-bookworm
 
 # Install Rust (required by napi-rs build step).
@@ -16,4 +16,4 @@ COPY . .
 # Install Node dependencies (napi-rs CLI, optional native packages).
 RUN bun install
 
-CMD ["bash", "e2e-test.sh"]
+CMD ["bash", "e2e/test.sh"]

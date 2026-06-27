@@ -13,7 +13,7 @@ Both are triggered automatically when you push a version tag.
 
 ## Version Update Checklist
 
-Before releasing, update the version in **3 files**:
+Before releasing, update the version in **all** of these files:
 
 ### 1. `Cargo.toml` (line 3)
 ```toml
@@ -23,16 +23,23 @@ version = "0.7.0"  # Update this
 edition = "2021"
 ```
 
-### 2. `package.json` (line 3)
-```json
-{
-  "name": "@owenizedd/bum",
-  "version": "0.7.0",  // Update this
-  ...
-}
+### 2. `package.json`
+Update the version in **three** places:
+- Root `version` field (line 3)
+- All `optionalDependencies` entries (e.g. `@owenizedd/bum-linux-x64-gnu`)
+
+```bash
+# Quick way: replace every occurrence in package.json
+sed -i 's/"0.7.0"/"0.7.1"/g' package.json
 ```
 
-### 3. `install.sh` (line 4)
+### 3. `npm/*/package.json` (platform packages)
+```bash
+# Update every platform package under npm/
+find npm -name 'package.json' -exec sed -i 's/"0.7.0"/"0.7.1"/g' {} +
+```
+
+### 4. `install.sh` (line 4)
 ```bash
 #!/usr/bin/env bash
 set -euo pipefail
@@ -197,7 +204,8 @@ After a successful release:
 Use this checklist for each release:
 
 - [ ] Update version in `Cargo.toml`
-- [ ] Update version in `package.json`
+- [ ] Update version in `package.json` (root + optionalDependencies)
+- [ ] Update version in all `npm/*/package.json` files
 - [ ] Update version in `install.sh`
 - [ ] Run `cargo build --release` to update `Cargo.lock`
 - [ ] Commit changes with message "Bump version to X.Y.Z"
