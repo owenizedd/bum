@@ -28,6 +28,11 @@ npm install -g @owenizedd/bum
 bum use 1.0.3
 ```
 
+> **Note:** When installing via npm, `~/.bun/bin` is not automatically added to your PATH. After running `bum use <version>`, add the following to your shell config (`~/.bashrc`, `~/.zshrc`, etc.) so you can run `bun` directly:
+> ```bash
+> export PATH="$HOME/.bun/bin:$PATH"
+> ```
+
 ### Via Script (Faster performance)
 
 If npm/npx doesn't work or you prefer native CLI experience, you can fallback to Rust binary:
