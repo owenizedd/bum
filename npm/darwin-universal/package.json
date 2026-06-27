@@ -1,6 +1,6 @@
 {
   "name": "@owenizedd/bum-darwin-universal",
-  "version": "0.7.14",
+  "version": "0.7.15",
   "os": [
     "darwin"
   ],
