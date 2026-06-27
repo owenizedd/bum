@@ -338,6 +338,8 @@ jobs:
             "
             echo "✅ Updated $(basename $dir) to $VERSION"
           done
+      - name: Upgrade npm for trusted publishing
+        run: npm install -g npm@latest
       - name: Publish platform packages
         run: |
           set -o pipefail
@@ -347,7 +349,7 @@ jobs:
             if [ -f "$dir"/*.node ]; then
               echo "📦 Publishing @owenizedd/bum-$platform..."
               cd "$dir"
-              if npm publish --access public --provenance --registry https://registry.npmjs.org 2>&1 | tee publish.log; then
+              if npm publish --access public --provenance 2>&1 | tee publish.log; then
                 echo "✅ Published @owenizedd/bum-$platform"
               else
                 if grep -q "cannot publish over the previously published\|You cannot publish over previously published versions" publish.log; then
@@ -380,7 +382,7 @@ jobs:
           then
             set -o pipefail
             echo "@owenizedd:registry=https://registry.npmjs.org" > ~/.npmrc
-            if npm publish --access public --provenance --registry https://registry.npmjs.org 2>&1 | tee publish.log; then
+            if npm publish --access public --provenance 2>&1 | tee publish.log; then
               echo "✅ Published successfully"
             else
               if grep -q "cannot publish over the previously published" publish.log || grep -q "You cannot publish over previously published versions" publish.log; then
