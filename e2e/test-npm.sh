@@ -4,6 +4,10 @@
 
 set -e
 
+if [ -f "$HOME/.cargo/env" ]; then
+  . "$HOME/.cargo/env"
+fi
+
 echo "🔨 Building native binding..."
 bun run build
 

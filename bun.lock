@@ -1,14 +1,41 @@
 {
   "lockfileVersion": 1,
+  "configVersion": 0,
   "workspaces": {
     "": {
       "name": "@rthionanda/bum",
       "devDependencies": {
         "@napi-rs/cli": "^2.18.4",
       },
+      "optionalDependencies": {
+        "@owenizedd/bum-darwin-arm64": "0.7.13",
+        "@owenizedd/bum-darwin-universal": "0.7.13",
+        "@owenizedd/bum-darwin-x64": "0.7.13",
+        "@owenizedd/bum-linux-arm64-gnu": "0.7.13",
+        "@owenizedd/bum-linux-arm64-musl": "0.7.13",
+        "@owenizedd/bum-linux-x64-gnu": "0.7.13",
+        "@owenizedd/bum-linux-x64-musl": "0.7.13",
+        "@owenizedd/bum-win32-x64-msvc": "0.7.13",
+      },
     },
   },
   "packages": {
     "@napi-rs/cli": ["@napi-rs/cli@2.18.4", "", { "bin": { "napi": "scripts/index.js" } }, "sha512-SgJeA4df9DE2iAEpr3M2H0OKl/yjtg1BnRI5/JyowS71tUWhrfSu2LT0V3vlHET+g1hBVlrO60PmEXwUEKp8Mg=="],
+
+    "@owenizedd/bum-darwin-arm64": ["@owenizedd/bum-darwin-arm64@0.7.13", "", { "os": "darwin", "cpu": "arm64" }, "sha512-O+atSwww1dCr/abWkuFcr2nh/0VI0lZEBcX1+v0GfAB/mj4ZRX2uqFhqALiHrSch/E2iJfvA0CBy/vpuQEC+lg=="],
+
+    "@owenizedd/bum-darwin-universal": ["@owenizedd/bum-darwin-universal@0.7.13", "", { "os": "darwin" }, "sha512-YQGPGgYBNWSqtCGQEIias83VH/kJ93zdYMKsG1IdGr1XNSGcHlhm4qaC8C4NUp3Iqj//Ea/EnxTB8d/nj9U3pA=="],
+
+    "@owenizedd/bum-darwin-x64": ["@owenizedd/bum-darwin-x64@0.7.13", "", { "os": "darwin", "cpu": "x64" }, "sha512-o4OzXZhIK9T78ye52gw0grrvn3Clwf1HuFpuogQNRUTAPMav/fPV+jbdOrPp9yijIuBrFZ3tyRx5dTVJO/i31w=="],
+
+    "@owenizedd/bum-linux-arm64-gnu": ["@owenizedd/bum-linux-arm64-gnu@0.7.13", "", { "os": "linux", "cpu": "arm64" }, "sha512-JkyAmgJB9jObRtZLYDYpoxPvz8+dT8wdby15n+cxbv2eZf6AS/rVFWq2fFa+NryrsbKNEjAVXH6qagMKBy9R0Q=="],
+
+    "@owenizedd/bum-linux-arm64-musl": ["@owenizedd/bum-linux-arm64-musl@0.7.13", "", { "os": "linux", "cpu": "arm64" }, "sha512-Wocl8bvsT7ENyM/5ZgelOgjw3MBnHXeSlYUAmj5CTPvPcahEpecb97UTy54gjAvQsvBQ5kg4bgytpmYy7x0dFQ=="],
+
+    "@owenizedd/bum-linux-x64-gnu": ["@owenizedd/bum-linux-x64-gnu@0.7.13", "", { "os": "linux", "cpu": "x64" }, "sha512-5dSmpvMiY53govZBM3nCEReZ7GvA8gmln9bWN2SyreBs5pPMU89C0rzFtA6e/OXzXpl7gY9m6QE1JCJL563qfw=="],
+
+    "@owenizedd/bum-linux-x64-musl": ["@owenizedd/bum-linux-x64-musl@0.7.13", "", { "os": "linux", "cpu": "x64" }, "sha512-0N3lfq7ZiFQLHnzvxPXwJeVROwuB2pohhWbpMJh8Q626Hwvmew8G9pxflSKqB1xQCN3qK642/lKTGeE6A2x4Ww=="],
+
+    "@owenizedd/bum-win32-x64-msvc": ["@owenizedd/bum-win32-x64-msvc@0.7.13", "", { "os": "win32", "cpu": "x64" }, "sha512-3vLiGOfFGx2KMsmeHXWSTFzG+B+lg52UHK+iYl2gYdm7/JUUsDeD6Qc2nxEAlySX/KRMlh08Z5JSlDrK2vTVkg=="],
   }
 }

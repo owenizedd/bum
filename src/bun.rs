@@ -25,13 +25,19 @@ fn get_bun_bin_name() -> &'static str {
 
 pub async fn get_active_version() -> String {
     //get active version by running bun -v
-    let output = Command::new("bun")
-        .arg("-v")
-        .output()
-        .await
-        .expect("Failed to execute bun -v, is bun installed?");
+    let output = match Command::new("bun").arg("-v").output().await {
+        Ok(output) => output,
+        Err(_) => return String::new(),
+    };
 
-    let stdout = std::str::from_utf8(&output.stdout).expect("Failed to convert stdout to string");
+    if !output.status.success() {
+        return String::new();
+    }
+
+    let stdout = match std::str::from_utf8(&output.stdout) {
+        Ok(stdout) => stdout,
+        Err(_) => return String::new(),
+    };
     stdout.trim().to_string()
 }
 
