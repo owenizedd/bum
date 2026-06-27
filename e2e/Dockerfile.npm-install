@@ -1,0 +1,52 @@
+# E2E test image for `npm install -g @owenizedd/bum` on a clean system.
+# Multi-stage build: compile the native binding in a builder image, then copy
+# it into a runtime image that has Node.js but no Bun and no Rust.
+ARG BUM_VERSION=1.3.3
+
+# ---------------------------------------------------------------------------
+# Builder stage: full toolchain (Node, Rust, Bun) to compile the binding.
+# ---------------------------------------------------------------------------
+FROM node:22-bookworm AS builder
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+RUN curl -fsSL https://bun.sh/install | bash
+ENV PATH="/root/.bun/bin:${PATH}"
+
+WORKDIR /app
+COPY . .
+RUN bun install && bun run build
+
+# Pack the npm package and inject the freshly built .node file.
+RUN set -e; \
+    rm -f bum-test-package.tgz owenizedd-bum-*.tgz; \
+    PKG_TARBALL=$(npm pack | tail -n 1); \
+    TMP_PKG=$(mktemp -d); \
+    tar -xzf "$PKG_TARBALL" -C "$TMP_PKG"; \
+    NODE_FILE=$(find /app -maxdepth 1 -name 'bum.*.node' | head -n 1); \
+    cp "$NODE_FILE" "$TMP_PKG/package/"; \
+    (cd "$TMP_PKG/package" && npm pack); \
+    mv "$TMP_PKG/package/owenizedd-bum-0.7.13.tgz" /app/bum-test-package.tgz; \
+    rm -rf "$TMP_PKG" "$PKG_TARBALL"
+
+# ---------------------------------------------------------------------------
+# Runtime stage: Node.js only, no Bun, no Rust, no ~/.bun/bin.
+# ---------------------------------------------------------------------------
+FROM node:22-bookworm
+
+ARG BUM_VERSION=1.3.3
+
+# Ensure Bun is truly absent.
+RUN if command -v bun >/dev/null 2>&1; then echo "❌ Bun should not be installed"; exit 1; fi
+
+WORKDIR /app
+COPY --from=builder /app/bum-test-package.tgz /app/bum-test-package.tgz
+COPY e2e/run-npm-install-test.sh /app/run-npm-install-test.sh
+
+RUN npm install -g /app/bum-test-package.tgz
+RUN rm -rf /root/.bun /root/.bum
+
+ENV BUM_VERSION=${BUM_VERSION}
+
+CMD ["bash", "/app/run-npm-install-test.sh"]

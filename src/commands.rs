@@ -87,6 +87,22 @@ pub async fn activate_bun(bun_used_path: PathBuf) -> Result<()> {
     activate_bun_to(bun_used_path, BUN_BIN_PATH.to_path_buf()).await
 }
 
+fn is_bun_bin_in_path() -> bool {
+    let Ok(path) = std::env::var("PATH") else {
+        return false;
+    };
+    let separator = if cfg!(windows) { ';' } else { ':' };
+    let bun_bin_dir = BUN_BIN_PATH
+        .parent()
+        .map(|p| p.to_string_lossy().to_string())
+        .unwrap_or_default();
+
+    path.split(separator).any(|entry| {
+        let entry = std::path::Path::new(entry);
+        entry.as_os_str() == std::ffi::OsStr::new(&bun_bin_dir)
+    })
+}
+
 async fn activate_bun_to(bun_used_path: PathBuf, target_path: PathBuf) -> Result<()> {
     if let Some(parent) = target_path.parent() {
         if fs::metadata(parent).await.is_err() {
@@ -106,6 +122,15 @@ async fn activate_bun_to(bun_used_path: PathBuf, target_path: PathBuf) -> Result
     fs::set_permissions(&target_path, permissions)
         .await
         .unwrap();
+
+    if !is_bun_bin_in_path() {
+        if let Some(parent) = target_path.parent() {
+            eprintln!(
+                "Hint: add {} to your PATH to use bun directly.",
+                parent.display()
+            );
+        }
+    }
 
     Ok(())
 }
