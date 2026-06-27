@@ -1,7 +1,10 @@
 #!/bin/bash
 # E2E test that verifies bum works when ~/.bun/bin is missing initially.
-# Runs entirely inside an isolated temporary $HOME so it does not touch
-# the developer's real Bun installation.
+# Tests both distribution paths:
+#   1. npm package  -> node bin.js
+#   2. standalone   -> target/release/bum
+# Each path runs entirely inside its own isolated temporary $HOME so the
+# developer's real Bun installation is never touched.
 set -euo pipefail
 
 if [ -f "$HOME/.cargo/env" ]; then
@@ -9,46 +12,67 @@ if [ -f "$HOME/.cargo/env" ]; then
 fi
 
 PROJECT_ROOT="$(cd "$(dirname "$0")" && pwd)"
+BUM_VERSION="1.3.3"
 
-# Build against the host environment (needs bun, cargo, node on PATH).
-echo "🔨 Building native binding..."
+# Build both distribution artifacts against the host environment.
+echo "🔨 Building native npm binding..."
 (
   cd "$PROJECT_ROOT"
   bun run build
 )
 
 echo ""
-echo "📦 Testing bin.js --version..."
-VERSION=$(node "$PROJECT_ROOT/bin.js" --version)
-echo "Version: $VERSION"
+echo "🔨 Building standalone binary..."
+(
+  cd "$PROJECT_ROOT"
+  cargo build --release
+)
 
-# Create an isolated home directory for the real test.
-ISOLATED_HOME=$(mktemp -d)
-echo ""
-echo "🏠 Using isolated HOME: $ISOLATED_HOME"
+# $1 = distribution name, $2... = bum executable + any fixed args
+test_distribution() {
+  local name="$1"
+  shift
+  local bum_cmd=("$@")
+  local isolated_home
+  isolated_home=$(mktemp -d)
 
-# Make sure the directory is truly empty.
-rm -rf "$ISOLATED_HOME/.bun" "$ISOLATED_HOME/.bum"
+  echo ""
+  echo "═══════════════════════════════════════════════════════════════"
+  echo "  Testing distribution: $name"
+  echo "  Command: ${bum_cmd[*]}"
+  echo "  Isolated HOME: $isolated_home"
+  echo "═══════════════════════════════════════════════════════════════"
 
-run_in_home() {
-  HOME="$ISOLATED_HOME" "$@"
+  run_in_home() {
+    HOME="$isolated_home" "$@"
+  }
+
+  echo ""
+  echo "📦 ${name}: --version"
+  run_in_home "${bum_cmd[@]}" --version
+
+  echo ""
+  echo "📦 ${name}: use ${BUM_VERSION} with missing ~/.bun/bin"
+  run_in_home "${bum_cmd[@]}" use "$BUM_VERSION"
+
+  echo ""
+  echo "📦 ${name}: verify active bun version"
+  run_in_home "$isolated_home/.bun/bin/bun" --version
+
+  echo ""
+  echo "📦 ${name}: list installed versions"
+  run_in_home "${bum_cmd[@]}" list
+
+  echo ""
+  echo "🧹 ${name}: cleaning up isolated home"
+  rm -rf "$isolated_home"
 }
 
-echo ""
-echo "📦 Testing bin.js use 1.3.3 with missing ~/.bun/bin..."
-run_in_home node "$PROJECT_ROOT/bin.js" use 1.3.3
+# Test npm package path.
+test_distribution "npm package" node "$PROJECT_ROOT/bin.js"
+
+# Test standalone binary path.
+test_distribution "standalone binary" "$PROJECT_ROOT/target/release/bum"
 
 echo ""
-echo "📦 Verifying bun was installed in isolated home..."
-run_in_home "$ISOLATED_HOME/.bun/bin/bun" --version
-
-echo ""
-echo "📦 Testing bin.js list in isolated home..."
-run_in_home node "$PROJECT_ROOT/bin.js" list
-
-echo ""
-echo "🧹 Cleaning up isolated home..."
-rm -rf "$ISOLATED_HOME"
-
-echo ""
-echo "✅ All e2e tests passed!"
+echo "✅ All e2e tests passed for both npm and standalone binary distributions!"

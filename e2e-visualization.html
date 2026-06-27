@@ -18,7 +18,7 @@
       padding: 2rem;
     }
     h1 { margin-bottom: 0.5rem; color: #f6e0b5; }
-    p.subtitle { color: #94a3b8; margin-top: 0; margin-bottom: 1.5rem; }
+    p.subtitle { color: #94a3b8; margin-top: 0; margin-bottom: 1.5rem; text-align: center; }
     #canvas {
       background: #1e293b;
       border-radius: 12px;
@@ -62,9 +62,9 @@
 </head>
 <body>
   <h1>bum E2E Test Flow</h1>
-  <p class="subtitle">Isolated <code>$HOME</code> — no contamination of the host's real <code>~/.bun/bin</code></p>
+  <p class="subtitle">Both distribution paths tested in isolated <code>$HOME</code> directories<br>no contamination of the host's real <code>~/.bun/bin</code></p>
 
-  <canvas id="canvas" width="900" height="700"></canvas>
+  <canvas id="canvas" width="1100" height="820"></canvas>
 
   <div class="controls">
     <button id="playBtn">▶ Play</button>
@@ -101,25 +101,40 @@
     };
 
     const nodes = [
-      { id: 'host', label: 'Host environment', sub: 'bun, cargo, node on PATH', x: 120, y: 80, w: 220, h: 70, color: colors.host },
-      { id: 'build', label: '1. bun run build', sub: 'Compiles native .node binding', x: 120, y: 200, w: 220, h: 70, color: colors.build },
-      { id: 'isolated', label: '2. Isolated $HOME', sub: '/tmp/tmp.XXXXXX', x: 120, y: 320, w: 220, h: 70, color: colors.step },
-      { id: 'version', label: '3. node bin.js --version', sub: 'Prints 0.7.13', x: 120, y: 440, w: 260, h: 70, color: colors.step },
-      { id: 'use', label: '4. node bin.js use 1.3.3', sub: 'Download → extract → create ~/.bun/bin → copy bun', x: 450, y: 440, w: 360, h: 90, color: colors.step },
-      { id: 'verify', label: '5. ~/.bun/bin/bun --version', sub: 'Prints 1.3.3', x: 450, y: 580, w: 260, h: 70, color: colors.verify },
-      { id: 'list', label: '6. node bin.js list', sub: 'Shows 1.3.3 (active)', x: 120, y: 580, w: 220, h: 70, color: colors.verify },
-      { id: 'cleanup', label: '7. rm -rf /tmp/tmp.XXXXXX', sub: 'Isolated home destroyed', x: 450, y: 320, w: 260, h: 70, color: colors.cleanup },
+      { id: 'host', label: 'Host environment', sub: 'bun, cargo, node on PATH', x: 390, y: 60, w: 320, h: 60, color: colors.host },
+      { id: 'build', label: 'Build artifacts', sub: 'bun run build + cargo build --release', x: 390, y: 160, w: 320, h: 70, color: colors.build },
+
+      // npm package path (left column)
+      { id: 'npm-label', label: 'npm package path', sub: 'node bin.js', x: 120, y: 280, w: 260, h: 50, color: colors.step },
+      { id: 'npm-home', label: 'Isolated $HOME', sub: '/tmp/tmp.XXXXXX', x: 120, y: 360, w: 260, h: 60, color: colors.step },
+      { id: 'npm-version', label: '--version', sub: 'Prints 0.7.13', x: 120, y: 450, w: 260, h: 60, color: colors.step },
+      { id: 'npm-use', label: 'use 1.3.3', sub: 'Download, extract, create ~/.bun/bin, copy bun', x: 120, y: 540, w: 260, h: 80, color: colors.step },
+      { id: 'npm-verify', label: '~/.bun/bin/bun --version', sub: 'Prints 1.3.3', x: 120, y: 650, w: 260, h: 60, color: colors.verify },
+      { id: 'npm-list', label: 'list', sub: 'Shows 1.3.3 (active)', x: 120, y: 740, w: 260, h: 60, color: colors.verify },
+
+      // standalone binary path (right column)
+      { id: 'bin-label', label: 'Standalone binary path', sub: 'target/release/bum', x: 720, y: 280, w: 260, h: 50, color: colors.step },
+      { id: 'bin-home', label: 'Isolated $HOME', sub: '/tmp/tmp.YYYYYY', x: 720, y: 360, w: 260, h: 60, color: colors.step },
+      { id: 'bin-version', label: '--version', sub: 'Prints 0.7.13', x: 720, y: 450, w: 260, h: 60, color: colors.step },
+      { id: 'bin-use', label: 'use 1.3.3', sub: 'Download, extract, create ~/.bun/bin, copy bun', x: 720, y: 540, w: 260, h: 80, color: colors.step },
+      { id: 'bin-verify', label: '~/.bun/bin/bun --version', sub: 'Prints 1.3.3', x: 720, y: 650, w: 260, h: 60, color: colors.verify },
+      { id: 'bin-list', label: 'list', sub: 'Shows 1.3.3 (active)', x: 720, y: 740, w: 260, h: 60, color: colors.verify },
     ];
 
     const edges = [
       { from: 'host', to: 'build' },
-      { from: 'build', to: 'isolated' },
-      { from: 'isolated', to: 'version' },
-      { from: 'version', to: 'use' },
-      { from: 'use', to: 'verify' },
-      { from: 'use', to: 'list' },
-      { from: 'verify', to: 'cleanup' },
-      { from: 'list', to: 'cleanup' },
+      { from: 'build', to: 'npm-label' },
+      { from: 'build', to: 'bin-label' },
+      { from: 'npm-label', to: 'npm-home' },
+      { from: 'npm-home', to: 'npm-version' },
+      { from: 'npm-version', to: 'npm-use' },
+      { from: 'npm-use', to: 'npm-verify' },
+      { from: 'npm-verify', to: 'npm-list' },
+      { from: 'bin-label', to: 'bin-home' },
+      { from: 'bin-home', to: 'bin-version' },
+      { from: 'bin-version', to: 'bin-use' },
+      { from: 'bin-use', to: 'bin-verify' },
+      { from: 'bin-verify', to: 'bin-list' },
     ];
 
     function drawRoundedRect(x, y, w, h, r, color, active) {
@@ -146,7 +161,6 @@
       const dx = x2 - x1;
       const dy = y2 - y1;
       const angle = Math.atan2(dy, dx);
-      const len = Math.sqrt(dx * dx + dy * dy);
       const endX = x2 - Math.cos(angle) * 15;
       const endY = y2 - Math.sin(angle) * 15;
       const startX = x1 + Math.cos(angle) * 15;
@@ -185,7 +199,6 @@
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Draw title on canvas
       ctx.font = 'bold 18px sans-serif';
       ctx.fillStyle = colors.text;
       ctx.textAlign = 'left';
@@ -208,39 +221,47 @@
         drawRoundedRect(node.x, node.y, node.w, node.h, 10, node.color, active);
 
         ctx.fillStyle = active ? '#1e293b' : '#94a3b8';
-        ctx.font = 'bold 14px sans-serif';
+        ctx.font = 'bold 13px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(node.label, node.x + node.w / 2, node.y + 28);
+        ctx.fillText(node.label, node.x + node.w / 2, node.y + 25);
 
         ctx.fillStyle = active ? '#334155' : '#64748b';
-        ctx.font = '12px sans-serif';
-        const lines = node.sub.split(' → ');
+        ctx.font = '11px sans-serif';
+        const lines = node.sub.split(',');
         if (lines.length > 1) {
           lines.forEach((line, idx) => {
-            ctx.fillText(line, node.x + node.w / 2, node.y + 50 + idx * 15);
+            ctx.fillText(line.trim(), node.x + node.w / 2, node.y + 44 + idx * 14);
           });
         } else {
-          ctx.fillText(node.sub, node.x + node.w / 2, node.y + 50);
+          ctx.fillText(node.sub, node.x + node.w / 2, node.y + 44);
         }
       });
 
-      // Isolation boundary box
-      ctx.strokeStyle = 'rgba(238, 169, 144, 0.4)';
-      ctx.lineWidth = 2;
-      ctx.setLineDash([8, 6]);
-      ctx.strokeRect(80, 290, 760, 390);
-      ctx.setLineDash([]);
-      ctx.fillStyle = 'rgba(238, 169, 144, 0.15)';
-      ctx.fillRect(80, 290, 760, 390);
-      ctx.fillStyle = '#eea990';
-      ctx.font = 'bold 13px sans-serif';
-      ctx.textAlign = 'left';
-      ctx.fillText('Isolation boundary — only /tmp/tmp.XXXXXX is modified', 95, 315);
+      // Isolation boundary boxes
+      const boundaries = [
+        { x: 90, y: 340, w: 320, h: 480, label: 'Isolated npm $HOME' },
+        { x: 690, y: 340, w: 320, h: 480, label: 'Isolated binary $HOME' },
+      ];
+
+      boundaries.forEach(b => {
+        ctx.strokeStyle = 'rgba(238, 169, 144, 0.4)';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([8, 6]);
+        ctx.strokeRect(b.x, b.y, b.w, b.h);
+        ctx.setLineDash([]);
+        ctx.fillStyle = 'rgba(238, 169, 144, 0.12)';
+        ctx.fillRect(b.x, b.y, b.w, b.h);
+        ctx.fillStyle = '#eea990';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(b.label, b.x + 12, b.y + 22);
+      });
 
       // Host untouched note
       ctx.fillStyle = '#94a3b8';
       ctx.font = '12px sans-serif';
-      ctx.fillText('Host ~/.bun/bin and ~/.bum/bun-versions are NOT touched', 95, 160);
+      ctx.textAlign = 'center';
+      ctx.fillText('Host ~/.bun/bin and ~/.bum/bun-versions are NOT touched', 550, 130);
     }
 
     function animate() {
