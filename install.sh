@@ -132,7 +132,7 @@ download_with_retry() {
 }
 
 download_with_retry "$bum_uri" "$exe_compressed" ||
-	error "Failed to download bum from \"$bum_uri\" after $max_attempts attempts"
+	error "Failed to download bum from \"$bum_uri\" after 3 attempts"
 
 tar -xvf "$exe_compressed" || error "Failed on decompress the executable"
 
