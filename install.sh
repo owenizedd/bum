@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
-VERSION="v0.7.22"
-if ! bun &>/dev/null; then
-	curl -fsSL https://bun.sh/install | bash
-fi
 
 # Fill missing functions
 
@@ -12,7 +8,6 @@ Red=''
 Green=''
 Dim=''
 Bold_White=''
-Bold_Green=''
 
 if [[ -t 1 ]]; then
     # Reset
@@ -24,24 +19,34 @@ if [[ -t 1 ]]; then
     Dim='\033[0;2m'    # White
 
     # Bold
-    Bold_Green='\033[1;32m' # Bold Green
     Bold_White='\033[1m'    # Bold White
 fi
+
 error() {
     echo -e "${Red}error${Color_Off}:" "$@" >&2
     exit 1
 }
 
 info() {
-    echo -e "${Dim}$@ ${Color_Off}"
+    echo -e "${Dim}$* ${Color_Off}"
 }
 
 info_bold() {
-    echo -e "${Bold_White}$@ ${Color_Off}"
+    echo -e "${Bold_White}$* ${Color_Off}"
 }
 
 success() {
-    echo -e "${Green}$@ ${Color_Off}"
+    echo -e "${Green}$* ${Color_Off}"
+}
+
+# The tilde is literal here: this output is only ever shown to the user.
+# shellcheck disable=SC2088
+tildify() {
+    if [[ $1 == "$HOME/"* ]]; then
+        echo "~/${1#"$HOME"/}"
+    else
+        echo "$1"
+    fi
 }
 
 add_to_config() {
@@ -63,6 +68,22 @@ add_to_config() {
     info "Added configuration block to $config_file."
 }
 
+# Everything below relies on these being present. Checked up front so the
+# script fails with a clear message instead of midway through an install.
+# bun is deliberately not in this list: it is installed further down.
+for cmd in curl tar uname mktemp mkdir mv rm chmod grep basename; do
+	command -v "$cmd" >/dev/null 2>&1 ||
+		error "'$cmd' is required to install bum but was not found in PATH"
+done
+
+VERSION="v0.7.22"
+
+if ! command -v bun >/dev/null 2>&1; then
+	info "bun was not found, installing it first..."
+	curl -fsSL https://bun.sh/install | bash ||
+		error "Failed to install bun, see https://bun.sh/docs/installation"
+fi
+
 arch=$(uname -ms)
 
 case $arch in
@@ -80,7 +101,7 @@ case $arch in
 	;;
 esac
 
-GITHUB=${GITHUB-"https://github.com"}
+GITHUB=${GITHUB:-"https://github.com"}
 
 github_repo="$GITHUB/owenizedd/bum"
 
@@ -110,62 +131,59 @@ download_with_retry() {
 	local attempt=1
 	local wait_time=2
 
-	while [ $attempt -le $max_attempts ]; do
+	while [ "$attempt" -le "$max_attempts" ]; do
 		info "Downloading bum (attempt $attempt/$max_attempts)..."
-		
+
 		if curl --fail --location --progress-bar --max-time "$timeout" --output "$output" "$url"; then
 			success "Download successful!"
 			return 0
 		fi
-		
-		if [ $attempt -lt $max_attempts ]; then
+
+		if [ "$attempt" -lt "$max_attempts" ]; then
 			info "Download failed. Retrying in ${wait_time}s..."
-			sleep $wait_time
+			sleep "$wait_time"
 			wait_time=$((wait_time * 2))  # Exponential backoff
 			timeout=$((timeout + 30))      # Increase timeout for next attempt
 		fi
-		
+
 		attempt=$((attempt + 1))
 	done
-	
+
 	return 1
 }
+
+# The tarball is unpacked in a scratch directory instead of the caller's
+# working directory, so a failed install never leaves files behind and
+# never overwrites something that happens to share the archive's name.
+temp_dir=$(mktemp -d) ||
+	error "Failed to create a temporary directory"
+trap 'rm -rf "${temp_dir:?}"; rm -f "${exe_compressed:?}"' EXIT
 
 download_with_retry "$bum_uri" "$exe_compressed" ||
 	error "Failed to download bum from \"$bum_uri\" after 3 attempts"
 
-tar -xvf "$exe_compressed" || error "Failed on decompress the executable"
+tar -xf "$exe_compressed" -C "$temp_dir" ||
+	error "Failed on decompress the executable"
 
-rm "$exe_compressed"
+[[ -f "$temp_dir/$bum_folder_name/bum" ]] ||
+	error "Expected \"$bum_folder_name/bum\" inside the archive but it was not there"
 
-mv "$bum_folder_name/bum" $exe
-
-rm -r $bum_folder_name
+mv "$temp_dir/$bum_folder_name/bum" "$exe" ||
+	error "Failed to move the bum executable to \"$exe\""
 
 mkdir -p "$install_dir/bun-versions"
 
 chmod +x "$exe" ||
 	error 'Failed to set permissions on bum executable'
 
-tildify() {
-	if [[ $1 = $HOME/* ]]; then
-		local replacement=\~/
-
-		echo "${1/$HOME\//$replacement}"
-	else
-		echo "$1"
-	fi
-}
-
-echo "bum was installed successfully to "$exe""
+success "bum was installed successfully to \"$exe\""
 
 refresh_command=''
 
-tilde_bin_dir="$bin_dir"
 quoted_install_dir=\"${install_dir//\"/\\\"}\"
 bun_bin_dir="$HOME/.bun/bin"
 
-if [[ $quoted_install_dir = \"$HOME/* ]]; then
+if [[ $quoted_install_dir == "\"$HOME/"* ]]; then
 	quoted_install_dir=${quoted_install_dir/$HOME\//\$HOME/}
 fi
 
@@ -241,19 +259,17 @@ bash)
 
 	set_manually=true
 	for bash_config in "${bash_configs[@]}"; do
-		tilde_bash_config=$(tildify "$bash_config")
-
 		if [[ -w $bash_config ]]; then
 			add_to_config "$bash_config" "${commands[@]}"
 
-			refresh_command="source $bash_config"
+			refresh_command="source $(tildify "$bash_config")"
 			set_manually=false
 			break
 		fi
 	done
 
-	if [[ $set_manually = true ]]; then
-		echo "Manually add the directory to $tilde_bash_config (or similar):"
+	if [[ $set_manually == true ]]; then
+		echo "Manually add the directory to $(tildify "${bash_configs[0]}") (or similar):"
 
 		for command in "${commands[@]}"; do
 			info_bold "  $command"
@@ -267,3 +283,9 @@ bash)
 	info_bold "  export PATH=\"$bun_bin_dir:\$PATH\""
 	;;
 esac
+
+if [[ -n $refresh_command ]]; then
+	echo
+	info "To get started, run:"
+	info_bold "  $refresh_command"
+fi
